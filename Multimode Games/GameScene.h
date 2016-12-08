@@ -7,7 +7,14 @@
 //
 
 #import <SpriteKit/SpriteKit.h>
+#import "GameViewController.h"
 
 @interface GameScene : SKScene
+
+@property (nonatomic) SKSpriteNode* player;
+@property (nonatomic) BOOL sceneInitialized;
+@property GameViewController* viewController;
+
+-(void)ChangeScene:(int)sceneID;
 
 @end

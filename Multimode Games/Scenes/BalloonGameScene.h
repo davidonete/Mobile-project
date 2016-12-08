@@ -6,8 +6,8 @@
 //  Copyright © 2016 David Parra. All rights reserved.
 //
 
-#ifndef BalloonGameScene_h
-#define BalloonGameScene_h
+#import "GameScene.h"
 
+@interface BalloonGameScene : GameScene
 
-#endif /* BalloonGameScene_h */
+@end

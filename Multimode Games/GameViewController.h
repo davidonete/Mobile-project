@@ -12,4 +12,6 @@
 
 @interface GameViewController : UIViewController
 
+-(void)ChangeScene:(int)sceneID;
+
 @end

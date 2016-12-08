@@ -7,47 +7,102 @@
 //
 
 #import "GameViewController.h"
-#import "GameScene.h"
+#import "Scenes/BalloonGameScene.h"
+#import "Scenes/PlatformerGameScene.h"
 
 @implementation GameViewController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
 
-    // Load the SKScene from 'GameScene.sks'
-    GameScene *scene = (GameScene *)[SKScene nodeWithFileNamed:@"GameScene"];
-    
-    // Set the scale mode to scale to fit the window
-    scene.scaleMode = SKSceneScaleModeAspectFill;
-    
     SKView *skView = (SKView *)self.view;
     
-    // Present the scene
-    [skView presentScene:scene];
-    
     skView.showsFPS = YES;
+    skView.showsDrawCount = YES;
     skView.showsNodeCount = YES;
+    
+    if(!skView.scene)
+    {
+        [self ChangeScene:1];
+    }
 }
 
-- (BOOL)shouldAutorotate {
+- (BOOL)shouldAutorotate
+{
     return YES;
 }
 
-- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations
+{
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
+    {
         return UIInterfaceOrientationMaskAllButUpsideDown;
-    } else {
+    } else
+    {
         return UIInterfaceOrientationMaskAll;
     }
 }
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
     // Release any cached data, images, etc that aren't in use.
 }
 
-- (BOOL)prefersStatusBarHidden {
+- (BOOL)prefersStatusBarHidden
+{
     return YES;
+}
+
+-(BOOL) canBecomeFirstResponder
+{
+    return YES;
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self becomeFirstResponder];
+}
+
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [self resignFirstResponder];
+}
+
+-(void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event
+{
+    if(motion == UIEventSubtypeMotionShake)
+    {
+        //Send shake notification
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"shake" object:self];
+    }
+}
+
+-(void)ChangeScene:(int)sceneID
+{
+    SKView* skView = (SKView *)self.view;
+    GameScene* NewScene;
+    SKTransition* doors = [SKTransition doorsOpenVerticalWithDuration:0.5];
+    
+    switch(sceneID)
+    {
+        case 0:
+            NewScene = [[PlatformerGameScene alloc] initWithSize:skView.bounds.size];
+        break;
+        case 1:
+            NewScene = [[BalloonGameScene alloc] initWithSize:skView.bounds.size];
+        break;
+        default:
+           NewScene = [[GameScene alloc] initWithSize:skView.bounds.size];
+        break;
+        
+    }
+    
+    NewScene.viewController = self;
+    [skView presentScene:NewScene transition:doors];
 }
 
 @end

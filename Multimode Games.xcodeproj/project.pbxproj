@@ -7,10 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E48E03191DF9E41B00D51223 /* PlatformerGameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = E48E03181DF9E41B00D51223 /* PlatformerGameScene.m */; };
+		E48E031D1DF9EBC800D51223 /* BalloonGameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = E48E031C1DF9EBC800D51223 /* BalloonGameScene.m */; };
 		E4BA5E4C1DF9AE34001E8784 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E4BA5E4B1DF9AE34001E8784 /* main.m */; };
 		E4BA5E4F1DF9AE34001E8784 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E4BA5E4E1DF9AE34001E8784 /* AppDelegate.m */; };
-		E4BA5E511DF9AE34001E8784 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = E4BA5E501DF9AE34001E8784 /* GameScene.sks */; };
-		E4BA5E531DF9AE34001E8784 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = E4BA5E521DF9AE34001E8784 /* Actions.sks */; };
 		E4BA5E561DF9AE34001E8784 /* GameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = E4BA5E551DF9AE34001E8784 /* GameScene.m */; };
 		E4BA5E591DF9AE34001E8784 /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E4BA5E581DF9AE34001E8784 /* GameViewController.m */; };
 		E4BA5E5C1DF9AE34001E8784 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4BA5E5A1DF9AE34001E8784 /* Main.storyboard */; };
@@ -18,6 +18,7 @@
 		E4BA5E611DF9AE35001E8784 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4BA5E5F1DF9AE35001E8784 /* LaunchScreen.storyboard */; };
 		E4BA5E6C1DF9AE35001E8784 /* Multimode_GamesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E4BA5E6B1DF9AE35001E8784 /* Multimode_GamesTests.m */; };
 		E4BA5E771DF9AE35001E8784 /* Multimode_GamesUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = E4BA5E761DF9AE35001E8784 /* Multimode_GamesUITests.m */; };
+		E4BA5E851DF9B52E001E8784 /* Assets in Resources */ = {isa = PBXBuildFile; fileRef = E4BA5E841DF9B52E001E8784 /* Assets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,12 +39,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E48E03181DF9E41B00D51223 /* PlatformerGameScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PlatformerGameScene.m; path = Scenes/PlatformerGameScene.m; sourceTree = "<group>"; };
+		E48E031A1DF9E46900D51223 /* PlatformerGameScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PlatformerGameScene.h; path = Scenes/PlatformerGameScene.h; sourceTree = "<group>"; };
+		E48E031B1DF9EBB000D51223 /* BalloonGameScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BalloonGameScene.h; path = Scenes/BalloonGameScene.h; sourceTree = "<group>"; };
+		E48E031C1DF9EBC800D51223 /* BalloonGameScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BalloonGameScene.m; path = Scenes/BalloonGameScene.m; sourceTree = "<group>"; };
 		E4BA5E471DF9AE34001E8784 /* Multimode Games.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Multimode Games.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4BA5E4B1DF9AE34001E8784 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		E4BA5E4D1DF9AE34001E8784 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		E4BA5E4E1DF9AE34001E8784 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		E4BA5E501DF9AE34001E8784 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
-		E4BA5E521DF9AE34001E8784 /* Actions.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Actions.sks; sourceTree = "<group>"; };
 		E4BA5E541DF9AE34001E8784 /* GameScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameScene.h; sourceTree = "<group>"; };
 		E4BA5E551DF9AE34001E8784 /* GameScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameScene.m; sourceTree = "<group>"; };
 		E4BA5E571DF9AE34001E8784 /* GameViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
@@ -58,6 +61,7 @@
 		E4BA5E721DF9AE35001E8784 /* Multimode GamesUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Multimode GamesUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4BA5E761DF9AE35001E8784 /* Multimode_GamesUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Multimode_GamesUITests.m; sourceTree = "<group>"; };
 		E4BA5E781DF9AE35001E8784 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E4BA5E841DF9B52E001E8784 /* Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Assets; path = "Multimode Games/Assets"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,9 +89,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E48E03171DF9E3E600D51223 /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				E4BA5E541DF9AE34001E8784 /* GameScene.h */,
+				E4BA5E551DF9AE34001E8784 /* GameScene.m */,
+				E48E03181DF9E41B00D51223 /* PlatformerGameScene.m */,
+				E48E031A1DF9E46900D51223 /* PlatformerGameScene.h */,
+				E48E031B1DF9EBB000D51223 /* BalloonGameScene.h */,
+				E48E031C1DF9EBC800D51223 /* BalloonGameScene.m */,
+			);
+			name = Scenes;
+			sourceTree = "<group>";
+		};
 		E4BA5E3E1DF9AE34001E8784 = {
 			isa = PBXGroup;
 			children = (
+				E4BA5E841DF9B52E001E8784 /* Assets */,
 				E4BA5E491DF9AE34001E8784 /* Multimode Games */,
 				E4BA5E6A1DF9AE35001E8784 /* Multimode GamesTests */,
 				E4BA5E751DF9AE35001E8784 /* Multimode GamesUITests */,
@@ -108,12 +126,9 @@
 		E4BA5E491DF9AE34001E8784 /* Multimode Games */ = {
 			isa = PBXGroup;
 			children = (
+				E48E03171DF9E3E600D51223 /* Scenes */,
 				E4BA5E4D1DF9AE34001E8784 /* AppDelegate.h */,
 				E4BA5E4E1DF9AE34001E8784 /* AppDelegate.m */,
-				E4BA5E501DF9AE34001E8784 /* GameScene.sks */,
-				E4BA5E521DF9AE34001E8784 /* Actions.sks */,
-				E4BA5E541DF9AE34001E8784 /* GameScene.h */,
-				E4BA5E551DF9AE34001E8784 /* GameScene.m */,
 				E4BA5E571DF9AE34001E8784 /* GameViewController.h */,
 				E4BA5E581DF9AE34001E8784 /* GameViewController.m */,
 				E4BA5E5A1DF9AE34001E8784 /* Main.storyboard */,
@@ -258,10 +273,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4BA5E5C1DF9AE34001E8784 /* Main.storyboard in Resources */,
-				E4BA5E511DF9AE34001E8784 /* GameScene.sks in Resources */,
+				E4BA5E851DF9B52E001E8784 /* Assets in Resources */,
 				E4BA5E5E1DF9AE35001E8784 /* Assets.xcassets in Resources */,
 				E4BA5E611DF9AE35001E8784 /* LaunchScreen.storyboard in Resources */,
-				E4BA5E531DF9AE34001E8784 /* Actions.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -288,6 +302,8 @@
 			files = (
 				E4BA5E591DF9AE34001E8784 /* GameViewController.m in Sources */,
 				E4BA5E4F1DF9AE34001E8784 /* AppDelegate.m in Sources */,
+				E48E031D1DF9EBC800D51223 /* BalloonGameScene.m in Sources */,
+				E48E03191DF9E41B00D51223 /* PlatformerGameScene.m in Sources */,
 				E4BA5E561DF9AE34001E8784 /* GameScene.m in Sources */,
 				E4BA5E4C1DF9AE34001E8784 /* main.m in Sources */,
 			);
@@ -521,6 +537,7 @@
 				E4BA5E7D1DF9AE35001E8784 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E4BA5E7E1DF9AE35001E8784 /* Build configuration list for PBXNativeTarget "Multimode GamesTests" */ = {
 			isa = XCConfigurationList;
@@ -529,6 +546,7 @@
 				E4BA5E801DF9AE35001E8784 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E4BA5E811DF9AE35001E8784 /* Build configuration list for PBXNativeTarget "Multimode GamesUITests" */ = {
 			isa = XCConfigurationList;
@@ -537,6 +555,7 @@
 				E4BA5E831DF9AE35001E8784 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

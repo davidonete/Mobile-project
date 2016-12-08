@@ -6,8 +6,8 @@
 //  Copyright © 2016 David Parra. All rights reserved.
 //
 
-#ifndef PlatformerGameScene_h
-#define PlatformerGameScene_h
+#import "GameScene.h"
 
+@interface PlatformerGameScene : GameScene
 
-#endif /* PlatformerGameScene_h */
+@end
