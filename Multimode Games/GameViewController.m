@@ -12,6 +12,12 @@
 
 @implementation GameViewController
 
+- (void)dealloc
+{
+    recorder = nil;
+    audioRecorderTimer = nil;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -81,11 +87,60 @@
     }
 }
 
+-(void)InitializeAudioRecorder
+{
+    NSURL* url = [NSURL fileURLWithPath:@"/dev/null"];
+    
+    NSDictionary* settings = [NSDictionary dictionaryWithObjectsAndKeys:
+        [NSNumber numberWithFloat:44100.0], AVSampleRateKey,
+        [NSNumber numberWithInt:kAudioFormatAppleLossless], AVFormatIDKey,
+        [NSNumber numberWithInt:1], AVNumberOfChannelsKey,
+        [NSNumber numberWithInt:AVAudioQualityMax], AVEncoderAudioQualityKey,
+        nil];
+    
+    NSError* error;
+    
+    recorder = [[AVAudioRecorder alloc] initWithURL:url settings:settings error:&error];
+    
+    if(recorder)
+    {
+        [recorder prepareToRecord];
+        recorder.meteringEnabled = TRUE;
+        [recorder record];
+        audioRecorderTimer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(AudioRecorderTimerCallback:) userInfo:nil repeats:TRUE];
+                              
+    }
+    else
+        NSLog(@"%@", [error description]);
+}
+
+-(void)AudioRecorderTimerCallback:(NSTimer *)timer
+{
+    [recorder updateMeters];
+    
+    const double alpha = 0.05;
+    double peakPowerForChannel = pow(10, (0.05 * [recorder peakPowerForChannel:0]));
+    lowPassResults = alpha * peakPowerForChannel + (1.0 - alpha) * lowPassResults;
+    
+    //if(lowPassResults > 2.50)
+    if([recorder averagePowerForChannel:0] > 4.0 && [recorder peakPowerForChannel:0] > 12.0)
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"blow" object:self];
+    
+    //NSLog(@"Average input: %f Peak input: %f Low Pass Result: %f", [recorder averagePowerForChannel:0], [recorder peakPowerForChannel:0], lowPassResults);
+}
+
 -(void)ChangeScene:(int)sceneID
 {
     SKView* skView = (SKView *)self.view;
     GameScene* NewScene;
-    SKTransition* doors = [SKTransition doorsOpenVerticalWithDuration:0.5];
+    SKTransition* fade = [SKTransition fadeWithDuration:0.5];
+    
+    //Delete previous recorder instance (?)
+    if(recorder)
+    {
+        recorder = nil;
+        audioRecorderTimer = nil;
+    }
     
     switch(sceneID)
     {
@@ -93,16 +148,16 @@
             NewScene = [[PlatformerGameScene alloc] initWithSize:skView.bounds.size];
         break;
         case 1:
+            [self InitializeAudioRecorder];
             NewScene = [[BalloonGameScene alloc] initWithSize:skView.bounds.size];
         break;
         default:
            NewScene = [[GameScene alloc] initWithSize:skView.bounds.size];
         break;
-        
     }
     
     NewScene.viewController = self;
-    [skView presentScene:NewScene transition:doors];
+    [skView presentScene:NewScene transition:fade];
 }
 
 @end

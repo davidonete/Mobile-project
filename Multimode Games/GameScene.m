@@ -10,6 +10,11 @@
 
 @implementation GameScene
 
+-(void)dealloc
+{
+    //NSLog(@"Removed previous scene");
+}
+
 -(void)didMoveToView:(SKView *)view
 {
     if(!self.sceneInitialized)
@@ -20,6 +25,8 @@
 }
 
 -(void)InitializeScene {}
+
+-(void)ResetScene {}
 
 -(void)ChangeScene:(int)sceneID
 {

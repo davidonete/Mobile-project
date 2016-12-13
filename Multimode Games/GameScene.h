@@ -12,6 +12,9 @@
 @interface GameScene : SKScene
 
 @property (nonatomic) SKSpriteNode* player;
+@property (nonatomic) SKSpriteNode* background1;
+@property (nonatomic) SKSpriteNode* background2;
+
 @property (nonatomic) BOOL sceneInitialized;
 @property GameViewController* viewController;
 

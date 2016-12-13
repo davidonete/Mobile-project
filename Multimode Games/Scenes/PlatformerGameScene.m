@@ -12,7 +12,7 @@
 
 -(void)InitializeScene
 {
-    NSLog(@"Platformer Game Scene initialized");
+    NSLog(@"Platformer Game Scene initialized: %@", NSStringFromCGSize(self.frame.size));
     
     //Delegate shake event notification to a function
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(OnShakeDetected:) name:@"shake" object:nil];
