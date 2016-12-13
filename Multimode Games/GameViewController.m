@@ -118,9 +118,9 @@
 {
     [recorder updateMeters];
     
-    const double alpha = 0.05;
-    double peakPowerForChannel = pow(10, (0.05 * [recorder peakPowerForChannel:0]));
-    lowPassResults = alpha * peakPowerForChannel + (1.0 - alpha) * lowPassResults;
+    //const double alpha = 0.05;
+    //double peakPowerForChannel = pow(10, (0.05 * [recorder peakPowerForChannel:0]));
+    //lowPassResults = alpha * peakPowerForChannel + (1.0 - alpha) * lowPassResults;
     
     //if(lowPassResults > 2.50)
     if([recorder averagePowerForChannel:0] > 4.0 && [recorder peakPowerForChannel:0] > 12.0)

@@ -13,6 +13,12 @@
 -(void)dealloc
 {
     //NSLog(@"Removed previous scene");
+    [self removeActionForKey:@"spawn"];
+}
+
+-(CGFloat)Random:(CGFloat)min :(CGFloat)max
+{
+    return (rand() / (CGFloat) RAND_MAX) * (max - min) + min;
 }
 
 -(void)didMoveToView:(SKView *)view

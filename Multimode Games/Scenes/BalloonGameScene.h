@@ -10,4 +10,6 @@
 
 @interface BalloonGameScene : GameScene
 
+extern CGFloat obstacleXSpeed;
+
 @end

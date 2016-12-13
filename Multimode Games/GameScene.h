@@ -19,5 +19,6 @@
 @property GameViewController* viewController;
 
 -(void)ChangeScene:(int)sceneID;
+-(CGFloat) Random:(CGFloat)min :(CGFloat)max;
 
 @end

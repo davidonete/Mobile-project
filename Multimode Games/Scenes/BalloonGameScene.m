@@ -8,6 +8,8 @@
 
 #import "BalloonGameScene.h"
 
+CGFloat obstacleXSpeed = 1.0;
+
 @implementation BalloonGameScene
 
 -(void)InitializeScene
@@ -48,6 +50,7 @@
     self.physicsWorld.gravity = CGVectorMake(0.0, -1.0);
     
     //Start obstacle spawn timer
+    [self StartSpawn:5.0 :5.0];
 }
 
 -(SKSpriteNode *) newPlayer
@@ -63,7 +66,11 @@
     
     //Initialize Physic body (collision and mass)
     hull.physicsBody = [SKPhysicsBody bodyWithTexture:hull.texture size:hull.size];
+    hull.physicsBody.usesPreciseCollisionDetection = TRUE;
     hull.physicsBody.mass = 1.0;
+    hull.physicsBody.allowsRotation = FALSE;
+    hull.physicsBody.angularVelocity = 0.0;
+    hull.physicsBody.collisionBitMask = 0;
     
     SKAction* hover = [SKAction moveByX:200 y:0 duration:5.0];
     
@@ -71,26 +78,83 @@
     return hull;
 }
 
+-(void)StartSpawn:(CGFloat)spawnTime :(CGFloat)randomRange
+{
+    //Stop previous spawn actions
+    [self removeActionForKey:@"spawn"];
+    
+    //Configure spawn action
+    SKAction* spawnObstacles = [SKAction sequence:@[
+            [SKAction performSelector:@selector(addObstacle) onTarget:self],
+            [SKAction waitForDuration:spawnTime withRange:randomRange]]];
+    
+    //Run spawn action
+    [self runAction:[SKAction repeatActionForever:spawnObstacles] withKey:@"spawn"];
+}
+
+-(void) addObstacle
+{
+    SKSpriteNode* obstacle;
+    
+    CGSize obstacleSize = CGSizeMake(90, 156);
+    CGFloat XPos = self.frame.size.width + obstacleSize.height/2;
+    
+    CGFloat minYUp = 0.0;
+    CGFloat maxYUp = obstacleSize.height/2;
+    CGFloat minYDown = self.frame.size.height;
+    CGFloat maxYDown = self.frame.size.height - obstacleSize.height/2;
+
+    if([self Random:1: 100] > 50)
+    {
+        obstacle = [[SKSpriteNode alloc]
+        initWithTexture: [SKTexture textureWithImageNamed:@"Balloon_ColumnUp"]
+        color:[SKColor grayColor]
+        size:obstacleSize];
+    
+        obstacle.position = CGPointMake(XPos, [self Random:minYUp: maxYUp]);
+    }
+    else
+    {
+        obstacle = [[SKSpriteNode alloc]
+        initWithTexture: [SKTexture textureWithImageNamed:@"Balloon_ColumnDown"]
+        color:[SKColor grayColor]
+        size:obstacleSize];
+        
+        obstacle.position = CGPointMake(XPos, [self Random:minYDown: maxYDown]);
+    }
+    obstacle.name = @"obstacle";
+    
+    obstacle.physicsBody = [SKPhysicsBody bodyWithTexture:obstacle.texture size:obstacle.size];
+    obstacle.physicsBody.dynamic = FALSE;
+    
+    [self addChild:obstacle];
+}
+
 -(void)ResetScene
 {
     [self ChangeScene:1];
 }
 
+//Update before physics
 -(void)update:(NSTimeInterval)currentTime
 {
     //Background movement
     SKSpriteNode* bg1 = self.background1;
     SKSpriteNode* bg2 = self.background2;
     
-    bg1.position = CGPointMake(bg1.position.x - 1, bg1.position.y);
-    bg2.position = CGPointMake(bg2.position.x - 1, bg2.position.y);
+    bg1.position = CGPointMake(bg1.position.x - 0.5, bg1.position.y);
+    bg2.position = CGPointMake(bg2.position.x - 0.5, bg2.position.y);
     
     if(bg1.position.x < -bg1.size.width)
         bg1.position = CGPointMake(bg2.position.x + bg2.size.width, bg1.position.y);
     
     if(bg2.position.x < -bg2.size.width)
         bg2.position = CGPointMake(bg1.position.x + bg1.size.width, bg2.position.y);
-    
+}
+
+//Update after physics simulated
+-(void) didSimulatePhysics
+{
     if(self.sceneInitialized)
     {
         //Player fall off screen
@@ -101,12 +165,23 @@
             self.player.position = CGPointMake(self.player.position.x, self.frame.size.height - (self.player.size.height / 2) - 0.5);
             self.player.physicsBody.velocity = CGVectorMake(0.0, 0.0);
         }
+        
+        //Update all obstacles
+        [self enumerateChildNodesWithName:@"obstacle" usingBlock:^(SKNode *node, BOOL *stop)
+         {
+             //Delete non visible obstacles
+             if(node.position.x < -150.0)
+                 [node removeFromParent];
+             else
+             {
+                 node.position = CGPointMake(node.position.x - obstacleXSpeed, node.position.y);
+             }
+        }];
     }
 }
 
 -(void)AddImpulse:(float) force
 {
-    //self.player.physicsBody.velocity = CGVectorMake(0.0, 0.0);
     [self.player.physicsBody applyImpulse:CGVectorMake(0.0, force)];
 }
 
