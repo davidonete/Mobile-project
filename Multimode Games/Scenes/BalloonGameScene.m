@@ -9,6 +9,11 @@
 #import "BalloonGameScene.h"
 
 CGFloat obstacleXSpeed = 1.0;
+CGFloat distanceTraveled = 0.0;
+
+static const uint32_t playerCategory =   0x1 << 0;
+static const uint32_t obstacleCategory = 0x1 << 1;
+BOOL startAnimation = FALSE;
 
 @implementation BalloonGameScene
 
@@ -42,12 +47,19 @@ CGFloat obstacleXSpeed = 1.0;
     
     [self addChild:self.background2];
     
+    self.score = [SKLabelNode labelNodeWithFontNamed:@"Papyrus-Condensed"];
+    
+    self.score.position = CGPointMake(self.frame.size.width * 0.9, self.frame.size.height * 0.90);
+    self.score.zPosition = 999;
+    [self addChild:self.score];
+    
     //Initialize Player
     self.player = [self newPlayer];
     [self addChild:self.player];
     
     //Initialize gravity
     self.physicsWorld.gravity = CGVectorMake(0.0, -1.0);
+    self.physicsWorld.contactDelegate = self;
     
     //Start obstacle spawn timer
     [self StartSpawn:5.0 :5.0];
@@ -55,6 +67,34 @@ CGFloat obstacleXSpeed = 1.0;
 
 -(SKSpriteNode *) newPlayer
 {
+    self.life = 3;
+    self.lifeIcon1 = [[SKSpriteNode alloc]
+        initWithTexture: [SKTexture textureWithImageNamed:@"Balloon_Player"]
+        color:[SKColor grayColor]
+        size:CGSizeMake(32, 32)];
+    
+    self.lifeIcon1.zPosition = 999;
+    self.lifeIcon1.position = CGPointMake(16, self.frame.size.height - 20);
+    [self addChild:self.lifeIcon1];
+    
+    self.lifeIcon2 = [[SKSpriteNode alloc]
+        initWithTexture: [SKTexture textureWithImageNamed:@"Balloon_Player"]
+        color:[SKColor grayColor]
+        size:CGSizeMake(32, 32)];
+    
+    self.lifeIcon2.zPosition = 999;
+    self.lifeIcon2.position = CGPointMake(40, self.frame.size.height - 20);
+    [self addChild:self.lifeIcon2];
+    
+    self.lifeIcon3 = [[SKSpriteNode alloc]
+        initWithTexture: [SKTexture textureWithImageNamed:@"Balloon_Player"]
+        color:[SKColor grayColor]
+        size:CGSizeMake(32, 32)];
+    
+    self.lifeIcon3.zPosition = 999;
+    self.lifeIcon3.position = CGPointMake(64, self.frame.size.height - 20);
+    [self addChild:self.lifeIcon3];
+    
     //Size, color and texture
     SKSpriteNode* hull = [[SKSpriteNode alloc]
         initWithTexture: [SKTexture textureWithImageNamed:@"Balloon_Player"]
@@ -70,11 +110,14 @@ CGFloat obstacleXSpeed = 1.0;
     hull.physicsBody.mass = 1.0;
     hull.physicsBody.allowsRotation = FALSE;
     hull.physicsBody.angularVelocity = 0.0;
-    hull.physicsBody.collisionBitMask = 0;
+    
+    hull.physicsBody.categoryBitMask = playerCategory;
+    hull.physicsBody.collisionBitMask = obstacleCategory;
+    hull.physicsBody.contactTestBitMask = obstacleCategory;
     
     SKAction* hover = [SKAction moveByX:200 y:0 duration:5.0];
     
-    [hull runAction:hover];
+    [hull runAction:hover completion:^(void) { startAnimation = TRUE; }];
     return hull;
 }
 
@@ -127,44 +170,82 @@ CGFloat obstacleXSpeed = 1.0;
     obstacle.physicsBody = [SKPhysicsBody bodyWithTexture:obstacle.texture size:obstacle.size];
     obstacle.physicsBody.dynamic = FALSE;
     
+    obstacle.physicsBody.categoryBitMask = obstacleCategory;
+    
     [self addChild:obstacle];
 }
 
--(void)ResetScene
+-(void)GameOver
 {
-    [self ChangeScene:1];
+    //[self ChangeScene:1];
+    self.gameOver = true;
+    
+    self.player.physicsBody.velocity = CGVectorMake(0.0, 0.0);
+    self.player.physicsBody.affectedByGravity = FALSE;
+    self.player.physicsBody.collisionBitMask = 0;
+    self.player.physicsBody.contactTestBitMask = 0;
+    
+    SKLabelNode *menuTitle = [SKLabelNode labelNodeWithFontNamed:@"Papyrus-Condensed"];
+    
+    menuTitle.position = CGPointMake(self.frame.size.width/2, self.frame.size.height * 0.65);
+    menuTitle.text = @"Game Over";
+    menuTitle.fontSize = 50.0;
+    
+    [self addChild:menuTitle];
+    
+    self.menu1 = [SKLabelNode labelNodeWithFontNamed:@"Papyrus-Condensed"];
+    
+    self.menu1.position = CGPointMake(self.frame.size.width/2, self.frame.size.height * 0.45);
+    self.menu1.text = @"Reset game";
+    
+    [self addChild:self.menu1];
+    
+    self.menu2 = [SKLabelNode labelNodeWithFontNamed:@"Papyrus-Condensed"];
+    
+    self.menu2.position = CGPointMake(self.frame.size.width/2, self.frame.size.height * 0.3);
+    self.menu2.text = @"Main menu";
+    
+    [self addChild:self.menu2];
 }
 
 //Update before physics
 -(void)update:(NSTimeInterval)currentTime
 {
-    //Background movement
-    SKSpriteNode* bg1 = self.background1;
-    SKSpriteNode* bg2 = self.background2;
+    if(self.sceneInitialized && !self.gameOver)
+    {
+        //Background movement
+        SKSpriteNode* bg1 = self.background1;
+        SKSpriteNode* bg2 = self.background2;
     
-    bg1.position = CGPointMake(bg1.position.x - 0.5, bg1.position.y);
-    bg2.position = CGPointMake(bg2.position.x - 0.5, bg2.position.y);
+        bg1.position = CGPointMake(bg1.position.x - 0.5, bg1.position.y);
+        bg2.position = CGPointMake(bg2.position.x - 0.5, bg2.position.y);
     
-    if(bg1.position.x < -bg1.size.width)
-        bg1.position = CGPointMake(bg2.position.x + bg2.size.width, bg1.position.y);
+        if(bg1.position.x < -bg1.size.width)
+            bg1.position = CGPointMake(bg2.position.x + bg2.size.width, bg1.position.y);
     
-    if(bg2.position.x < -bg2.size.width)
-        bg2.position = CGPointMake(bg1.position.x + bg1.size.width, bg2.position.y);
+        if(bg2.position.x < -bg2.size.width)
+            bg2.position = CGPointMake(bg1.position.x + bg1.size.width, bg2.position.y);
+        
+        distanceTraveled += 0.01;
+        self.score.text = [NSString stringWithFormat:@"Distance: %.0f", distanceTraveled];
+    }
 }
 
 //Update after physics simulated
 -(void) didSimulatePhysics
 {
-    if(self.sceneInitialized)
+    if(self.sceneInitialized && !self.gameOver)
     {
         //Player fall off screen
         if(self.player.position.y < -self.player.size.height)
-            [self ResetScene];
+            [self GameOver];
         else if(self.player.position.y > self.frame.size.height - (self.player.size.height / 2))
         {
             self.player.position = CGPointMake(self.player.position.x, self.frame.size.height - (self.player.size.height / 2) - 0.5);
             self.player.physicsBody.velocity = CGVectorMake(0.0, 0.0);
         }
+        if(startAnimation)
+            self.player.position = CGPointMake(200, self.player.position.y);
         
         //Update all obstacles
         [self enumerateChildNodesWithName:@"obstacle" usingBlock:^(SKNode *node, BOOL *stop)
@@ -180,9 +261,67 @@ CGFloat obstacleXSpeed = 1.0;
     }
 }
 
+-(void)didBeginContact:(SKPhysicsContact *)contact
+{
+    SKPhysicsBody *firstBody, *secondBody;
+    
+    if(contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask)
+    {
+        firstBody = contact.bodyA;
+        secondBody = contact.bodyB;
+    }
+    else
+    {
+        firstBody = contact.bodyB;
+        secondBody = contact.bodyA;
+    }
+    
+    [self TakeDamage];
+    
+    //NSLog(@"Detected collision");
+    //if((firstBody.categoryBitMask & playerCategory) != 0)
+}
+
+-(void)TakeDamage
+{
+    self.life--;
+    if(self.life < 0)
+        [self GameOver];
+    else
+    {
+        if(self.life == 2)
+            [self.lifeIcon3 removeFromParent];
+        else if(self.life == 1)
+            [self.lifeIcon2 removeFromParent];
+        else if(self.life == 0)
+            [self.lifeIcon1 removeFromParent];
+        
+        self.player.physicsBody.velocity = CGVectorMake(0.0, 0.0);
+        self.player.position = CGPointMake(200, self.player.position.y);
+        
+        self.player.physicsBody.collisionBitMask = 0;
+        self.player.physicsBody.contactTestBitMask = 0;
+        
+        SKAction *animation = [SKAction sequence:@[
+            [SKAction runBlock:^(void) { self.player.hidden = TRUE; }],
+            [SKAction waitForDuration:0.2],
+            [SKAction runBlock:^(void) { self.player.hidden = FALSE; }],
+            [SKAction waitForDuration:0.2]]];
+        
+        
+        [self runAction:[SKAction repeatAction:animation count:7]
+              completion:^(void)
+              {
+                  self.player.physicsBody.collisionBitMask = obstacleCategory;
+                  self.player.physicsBody.contactTestBitMask = obstacleCategory;
+              }];
+    }
+}
+
 -(void)AddImpulse:(float) force
 {
-    [self.player.physicsBody applyImpulse:CGVectorMake(0.0, force)];
+    if(self.sceneInitialized && !self.gameOver)
+        [self.player.physicsBody applyImpulse:CGVectorMake(0.0, force)];
 }
 
 -(void)OnBlowDetected:(NSNotification *) notification
@@ -193,7 +332,23 @@ CGFloat obstacleXSpeed = 1.0;
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    [self AddImpulse:200.0];
+    if(!self.gameOver)
+        [self AddImpulse:200.0];
+    else
+    {
+        UITouch* t = [touches anyObject];
+        
+        CGPoint touchLocation = [t locationInNode:self.scene];
+        
+        if(CGRectContainsPoint(self.menu1.frame, touchLocation))
+        {
+            [self ChangeScene:1];
+        }
+        if(CGRectContainsPoint(self.menu2.frame, touchLocation))
+        {
+            [self ChangeScene:0];
+        }
+    }
 }
 
 @end

@@ -144,13 +144,13 @@
     
     switch(sceneID)
     {
-        case 0:
-            NewScene = [[PlatformerGameScene alloc] initWithSize:skView.bounds.size];
-        break;
         case 1:
             [self InitializeAudioRecorder];
             NewScene = [[BalloonGameScene alloc] initWithSize:skView.bounds.size];
         break;
+        case 2:
+            NewScene = [[PlatformerGameScene alloc] initWithSize:skView.bounds.size];
+            break;
         default:
            NewScene = [[GameScene alloc] initWithSize:skView.bounds.size];
         break;
