@@ -30,7 +30,7 @@
     
     if(!skView.scene)
     {
-        [self ChangeScene:1];
+        [self ChangeScene:2];
     }
 }
 

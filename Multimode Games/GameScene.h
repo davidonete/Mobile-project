@@ -12,6 +12,8 @@
 @interface GameScene : SKScene <SKPhysicsContactDelegate>
 
 @property (nonatomic) SKSpriteNode* player;
+@property (nonatomic) SKSpriteNode* ground1;
+@property (nonatomic) SKSpriteNode* ground2;
 @property (nonatomic) SKSpriteNode* background1;
 @property (nonatomic) SKSpriteNode* background2;
 @property (nonatomic) SKSpriteNode* lifeIcon1;
