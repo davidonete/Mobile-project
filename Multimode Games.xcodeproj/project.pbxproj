@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		989889E61E2E4B40006EC35C /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 989889E51E2E4B40006EC35C /* CoreMotion.framework */; };
+		98FEE4841E2EA3840004338D /* MenuGameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 98FEE4831E2EA3840004338D /* MenuGameScene.m */; };
 		E48E03191DF9E41B00D51223 /* PlatformerGameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = E48E03181DF9E41B00D51223 /* PlatformerGameScene.m */; };
 		E48E031D1DF9EBC800D51223 /* BalloonGameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = E48E031C1DF9EBC800D51223 /* BalloonGameScene.m */; };
 		E4BA5E4C1DF9AE34001E8784 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E4BA5E4B1DF9AE34001E8784 /* main.m */; };
@@ -43,6 +44,8 @@
 
 /* Begin PBXFileReference section */
 		989889E51E2E4B40006EC35C /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		98FEE4831E2EA3840004338D /* MenuGameScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MenuGameScene.m; path = Scenes/MenuGameScene.m; sourceTree = "<group>"; };
+		98FEE4851E2EA3960004338D /* MenuGameScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MenuGameScene.h; path = Scenes/MenuGameScene.h; sourceTree = "<group>"; };
 		E48E03181DF9E41B00D51223 /* PlatformerGameScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PlatformerGameScene.m; path = Scenes/PlatformerGameScene.m; sourceTree = "<group>"; };
 		E48E031A1DF9E46900D51223 /* PlatformerGameScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PlatformerGameScene.h; path = Scenes/PlatformerGameScene.h; sourceTree = "<group>"; };
 		E48E031B1DF9EBB000D51223 /* BalloonGameScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BalloonGameScene.h; path = Scenes/BalloonGameScene.h; sourceTree = "<group>"; };
@@ -109,6 +112,8 @@
 				E48E031C1DF9EBC800D51223 /* BalloonGameScene.m */,
 				E4CF5F8F1E2E7FB90016A19D /* SpaceGameScene.m */,
 				E4CF5F911E2E7FDA0016A19D /* SpaceGameScene.h */,
+				98FEE4831E2EA3840004338D /* MenuGameScene.m */,
+				98FEE4851E2EA3960004338D /* MenuGameScene.h */,
 			);
 			name = Scenes;
 			sourceTree = "<group>";
@@ -329,6 +334,7 @@
 				E48E03191DF9E41B00D51223 /* PlatformerGameScene.m in Sources */,
 				E4BA5E561DF9AE34001E8784 /* GameScene.m in Sources */,
 				E4BA5E4C1DF9AE34001E8784 /* main.m in Sources */,
+				98FEE4841E2EA3840004338D /* MenuGameScene.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

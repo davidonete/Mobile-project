@@ -10,6 +10,7 @@
 #import "Scenes/BalloonGameScene.h"
 #import "Scenes/PlatformerGameScene.h"
 #import "Scenes/SpaceGameScene.h"
+#import "Scenes/MenuGameScene.h"
 
 @implementation GameViewController
 
@@ -34,7 +35,7 @@
     
     if(!skView.scene)
     {
-        [self ChangeScene:3];
+        [self ChangeScene:0];
     }
 }
 
@@ -172,6 +173,9 @@
     
     switch(sceneID)
     {
+        case 0:
+            NewScene = [[MenuGameScene alloc] initWithSize:skView.bounds.size];
+        break;
         case 1:
             [self InitializeAudioRecorder];
             NewScene = [[BalloonGameScene alloc] initWithSize:skView.bounds.size];

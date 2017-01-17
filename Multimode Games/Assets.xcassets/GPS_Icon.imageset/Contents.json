@@ -2,6 +2,7 @@
   "images" : [
     {
       "idiom" : "universal",
+      "filename" : "GPS_Icon.png",
       "scale" : "1x"
     },
     {

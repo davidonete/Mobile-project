@@ -186,7 +186,6 @@ BOOL startAnimation = FALSE;
 
 -(void)GameOver
 {
-    //[self ChangeScene:1];
     self.gameOver = true;
     
     self.player.physicsBody.velocity = CGVectorMake(0.0, 0.0);

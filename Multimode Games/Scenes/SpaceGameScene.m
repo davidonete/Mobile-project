@@ -10,7 +10,7 @@
 
 @implementation SpaceGameScene
 
-CGFloat obstaclesDestroyed = 0.0;
+CGFloat ObstaclesAvoided = 0.0;
 CGFloat obstacleYSpeed = 1.0;
 
 static const uint32_t playerCategory =   0x1 << 0;
@@ -20,7 +20,7 @@ BOOL StartAnim = FALSE;
 -(void)InitializeScene
 {
     obstacleYSpeed = 1.0;
-    obstaclesDestroyed = 0.0;
+    ObstaclesAvoided = 0.0;
     
     NSLog(@"Space Game Scene initialized: %@", NSStringFromCGSize(self.frame.size));
     
@@ -51,9 +51,9 @@ BOOL StartAnim = FALSE;
     
     self.score = [SKLabelNode labelNodeWithFontNamed:@"Palatino-Bold"];
     
-    self.score.position = CGPointMake(self.frame.size.width * 0.82, self.frame.size.height * 0.9);
+    self.score.position = CGPointMake(self.frame.size.width * 0.82, self.frame.size.height * 0.92);
     self.score.zPosition = 999;
-    self.score.fontSize = (40 * self.frame.size.height)/375;
+    self.score.fontSize = (30 * self.frame.size.height)/375;
     
     [self addChild:self.score];
     
@@ -62,11 +62,11 @@ BOOL StartAnim = FALSE;
     [self addChild:self.player];
     
     //Initialize gravity
-    self.physicsWorld.gravity = CGVectorMake(0.0, -1.0);
+    self.physicsWorld.gravity = CGVectorMake(0.0, -0.5);
     self.physicsWorld.contactDelegate = self;
     
     //Start obstacle spawn timer
-    //[self StartSpawn:5 :5.0];
+    [self StartSpawn:1.0 :1.0];
 }
 
 -(SKSpriteNode *) newPlayer
@@ -122,7 +122,7 @@ BOOL StartAnim = FALSE;
     hull.physicsBody.collisionBitMask = obstacleCategory;
     hull.physicsBody.contactTestBitMask = obstacleCategory;
     
-    SKAction* hover = [SKAction moveByX:0 y:100 duration:2.5];
+    SKAction* hover = [SKAction moveByX:0 y:120 duration:2.5];
     
     [hull runAction:hover completion:^(void) { StartAnim = TRUE; }];
     return hull;
@@ -170,7 +170,7 @@ BOOL StartAnim = FALSE;
     obstacle.name = @"obstacle";
     
     obstacle.physicsBody = [SKPhysicsBody bodyWithTexture:obstacle.texture size:obstacle.size];
-    obstacle.physicsBody.dynamic = FALSE;
+    obstacle.physicsBody.dynamic = TRUE;
     
     obstacle.physicsBody.categoryBitMask = obstacleCategory;
     
@@ -179,7 +179,37 @@ BOOL StartAnim = FALSE;
 
 -(void)GameOver
 {
-
+    self.gameOver = true;
+    self.physicsWorld.gravity = CGVectorMake(0.0, 0.0);
+    
+    self.player.physicsBody.velocity = CGVectorMake(0.0, 0.0);
+    self.player.physicsBody.affectedByGravity = FALSE;
+    self.player.physicsBody.collisionBitMask = 0;
+    self.player.physicsBody.contactTestBitMask = 0;
+    
+    SKLabelNode *menuTitle = [SKLabelNode labelNodeWithFontNamed:@"Palatino-Bold"];
+    
+    menuTitle.position = CGPointMake(self.frame.size.width/2, self.frame.size.height * 0.65);
+    menuTitle.text = @"Game Over";
+    menuTitle.fontSize = (40 * self.frame.size.height)/375;
+    
+    [self addChild:menuTitle];
+    
+    self.menu1 = [SKLabelNode labelNodeWithFontNamed:@"Palatino-Bold"];
+    
+    self.menu1.position = CGPointMake(self.frame.size.width/2, self.frame.size.height * 0.45);
+    self.menu1.text = @"Reset game";
+    self.menu1.fontSize = (30 * self.frame.size.height)/375;
+    
+    [self addChild:self.menu1];
+    
+    self.menu2 = [SKLabelNode labelNodeWithFontNamed:@"Palatino-Bold"];
+    
+    self.menu2.position = CGPointMake(self.frame.size.width/2, self.frame.size.height * 0.3);
+    self.menu2.text = @"Main menu";
+    self.menu2.fontSize = (30 * self.frame.size.height)/375;
+    
+    [self addChild:self.menu2];
 }
 
 //Update before physics
@@ -191,14 +221,16 @@ BOOL StartAnim = FALSE;
         SKSpriteNode* bg1 = self.background1;
         SKSpriteNode* bg2 = self.background2;
         
-        bg1.position = CGPointMake(bg1.position.x, bg1.position.y - 0.5);
-        bg2.position = CGPointMake(bg2.position.x, bg2.position.y - 0.5);
+        bg1.position = CGPointMake(bg1.position.x, bg1.position.y - 1);
+        bg2.position = CGPointMake(bg2.position.x, bg2.position.y - 1);
         
         if(bg1.position.y < -bg1.size.height)
             bg1.position = CGPointMake(bg1.position.x, bg2.position.y + bg1.size.height);
         
         if(bg2.position.y < -bg2.size.height)
             bg2.position = CGPointMake(bg2.position.x, bg1.position.y + bg2.size.height);
+        
+        self.score.text = [NSString stringWithFormat:@"Asteroids: %.0f", ObstaclesAvoided];
     }
 }
 
@@ -216,18 +248,7 @@ BOOL StartAnim = FALSE;
              //Delete non visible obstacles
              if(node.position.y < -50.0)
              {
-                 /*
-                 obstacles++;
-                 if((int)obstacles % 5 == 0)
-                 {
-                     float spawnTime = 5.0 - obstacleYSpeed;
-                     if(spawnTime > 0.5)
-                     {
-                         obstacleYSpeed += obstacleYSpeed * 0.2;
-                         [self StartSpawn:spawnTime :spawnTime];
-                     }
-                 }
-                 */
+                 ObstaclesAvoided++;
                  [node removeFromParent];
                  
              }
@@ -237,12 +258,60 @@ BOOL StartAnim = FALSE;
 
 -(void)didBeginContact:(SKPhysicsContact *)contact
 {
-
+    SKPhysicsBody *firstBody, *secondBody;
+    
+    if(contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask)
+    {
+        firstBody = contact.bodyA;
+        secondBody = contact.bodyB;
+    }
+    else
+    {
+        firstBody = contact.bodyB;
+        secondBody = contact.bodyA;
+    }
+    
+    [self TakeDamage];
 }
 
 -(void)TakeDamage
 {
-
+    if(!self.invincible)
+    {
+        self.life--;
+        if(self.life < 0)
+            [self GameOver];
+        else
+        {
+            if(self.life == 2)
+                [self.lifeIcon3 removeFromParent];
+            else if(self.life == 1)
+                [self.lifeIcon2 removeFromParent];
+            else if(self.life == 0)
+                [self.lifeIcon1 removeFromParent];
+            
+            self.player.physicsBody.velocity = CGVectorMake(0.0, 0.0);
+            self.player.position = CGPointMake(200, self.player.position.y);
+            
+            self.player.physicsBody.collisionBitMask = 0;
+            self.player.physicsBody.contactTestBitMask = 0;
+            
+            SKAction *animation = [SKAction sequence:@[
+                                                       [SKAction runBlock:^(void) { self.player.hidden = TRUE; }],
+                                                       [SKAction waitForDuration:0.2],
+                                                       [SKAction runBlock:^(void) { self.player.hidden = FALSE; }],
+                                                       [SKAction waitForDuration:0.2]]];
+            self.invincible = TRUE;
+            
+            [self runAction:[SKAction repeatAction:animation count:7]
+                 completion:^(void)
+             {
+                 self.player.physicsBody.collisionBitMask = obstacleCategory;
+                 self.player.physicsBody.contactTestBitMask = obstacleCategory;
+                 self.invincible = FALSE;
+             }];
+        }
+    }
 }
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
@@ -254,7 +323,7 @@ BOOL StartAnim = FALSE;
         CGPoint touchLocation = [t locationInNode:self.scene];
         
         if(CGRectContainsPoint(self.menu1.frame, touchLocation))
-            [self ChangeScene:1];
+            [self ChangeScene:3];
         if(CGRectContainsPoint(self.menu2.frame, touchLocation))
             [self ChangeScene:0];
     }
@@ -266,13 +335,23 @@ BOOL StartAnim = FALSE;
     NSNumber* number = (NSNumber*)dictionary[@"gyroscope"];
     int value = number.intValue;
     
-    float speed = 5.0;
+    float speed = 10.0;
     
-    if(value > 5)
-        self.player.position = CGPointMake(self.player.position.x + speed, self.player.position.y);
-    else if(value < -5)
-        self.player.position = CGPointMake(self.player.position.x - speed, self.player.position.y);
-        
+    if(value > 2)
+    {
+        if(self.player.position.x > self.frame.size.width - self.player.size.width / 2)
+            self.player.position = CGPointMake(self.frame.size.width - self.player.size.width / 2 - 1, self.player.position.y);
+        else
+            self.player.position = CGPointMake(self.player.position.x + speed, self.player.position.y);
+    }
+    else if(value < -2)
+    {
+        if(self.player.position.x < self.player.size.width / 2)
+            self.player.position = CGPointMake(self.player.size.width / 2 + 1, self.player.position.y);
+        else
+            self.player.position = CGPointMake(self.player.position.x - speed, self.player.position.y);
+    }
+    
     //NSLog(@"%i", number.intValue);
 }
 
