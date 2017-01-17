@@ -9,6 +9,7 @@
 #import "GameViewController.h"
 #import "Scenes/BalloonGameScene.h"
 #import "Scenes/PlatformerGameScene.h"
+#import "Scenes/SpaceGameScene.h"
 
 @implementation GameViewController
 
@@ -183,7 +184,7 @@
             motionManager.deviceMotionUpdateInterval = 1 / 60.0;
             [motionManager startDeviceMotionUpdates];
             timer = [NSTimer scheduledTimerWithTimeInterval:1.0/60.0 target:self selector:@selector(GyroscopeUpdate) userInfo:nil repeats:TRUE];
-            NewScene = [[GameScene alloc] initWithSize:skView.bounds.size];
+            NewScene = [[SpaceGameScene alloc] initWithSize:skView.bounds.size];
         break;
         default:
            NewScene = [[GameScene alloc] initWithSize:skView.bounds.size];

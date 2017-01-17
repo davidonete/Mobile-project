@@ -15,11 +15,12 @@
 		E4BA5E561DF9AE34001E8784 /* GameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = E4BA5E551DF9AE34001E8784 /* GameScene.m */; };
 		E4BA5E591DF9AE34001E8784 /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E4BA5E581DF9AE34001E8784 /* GameViewController.m */; };
 		E4BA5E5C1DF9AE34001E8784 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4BA5E5A1DF9AE34001E8784 /* Main.storyboard */; };
-		E4BA5E5E1DF9AE35001E8784 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4BA5E5D1DF9AE35001E8784 /* Assets.xcassets */; };
 		E4BA5E611DF9AE35001E8784 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4BA5E5F1DF9AE35001E8784 /* LaunchScreen.storyboard */; };
 		E4BA5E6C1DF9AE35001E8784 /* Multimode_GamesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E4BA5E6B1DF9AE35001E8784 /* Multimode_GamesTests.m */; };
 		E4BA5E771DF9AE35001E8784 /* Multimode_GamesUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = E4BA5E761DF9AE35001E8784 /* Multimode_GamesUITests.m */; };
 		E4BA5E851DF9B52E001E8784 /* Assets in Resources */ = {isa = PBXBuildFile; fileRef = E4BA5E841DF9B52E001E8784 /* Assets */; };
+		E4CF5F901E2E7FB90016A19D /* SpaceGameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = E4CF5F8F1E2E7FB90016A19D /* SpaceGameScene.m */; };
+		E4CF5F931E2E81490016A19D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4CF5F921E2E81490016A19D /* Assets.xcassets */; };
 		E4E24C771DFF666600AE57EB /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4E24C761DFF666600AE57EB /* AVFoundation.framework */; };
 /* End PBXBuildFile section */
 
@@ -55,7 +56,6 @@
 		E4BA5E571DF9AE34001E8784 /* GameViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
 		E4BA5E581DF9AE34001E8784 /* GameViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameViewController.m; sourceTree = "<group>"; };
 		E4BA5E5B1DF9AE34001E8784 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		E4BA5E5D1DF9AE35001E8784 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E4BA5E601DF9AE35001E8784 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E4BA5E621DF9AE35001E8784 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E4BA5E671DF9AE35001E8784 /* Multimode GamesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Multimode GamesTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -65,6 +65,9 @@
 		E4BA5E761DF9AE35001E8784 /* Multimode_GamesUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Multimode_GamesUITests.m; sourceTree = "<group>"; };
 		E4BA5E781DF9AE35001E8784 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E4BA5E841DF9B52E001E8784 /* Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Assets; path = "Multimode Games/Assets"; sourceTree = "<group>"; };
+		E4CF5F8F1E2E7FB90016A19D /* SpaceGameScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SpaceGameScene.m; path = Scenes/SpaceGameScene.m; sourceTree = "<group>"; };
+		E4CF5F911E2E7FDA0016A19D /* SpaceGameScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SpaceGameScene.h; path = Scenes/SpaceGameScene.h; sourceTree = "<group>"; };
+		E4CF5F921E2E81490016A19D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E4E24C761DFF666600AE57EB /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -104,6 +107,8 @@
 				E48E031A1DF9E46900D51223 /* PlatformerGameScene.h */,
 				E48E031B1DF9EBB000D51223 /* BalloonGameScene.h */,
 				E48E031C1DF9EBC800D51223 /* BalloonGameScene.m */,
+				E4CF5F8F1E2E7FB90016A19D /* SpaceGameScene.m */,
+				E4CF5F911E2E7FDA0016A19D /* SpaceGameScene.h */,
 			);
 			name = Scenes;
 			sourceTree = "<group>";
@@ -139,9 +144,9 @@
 				E4BA5E571DF9AE34001E8784 /* GameViewController.h */,
 				E4BA5E581DF9AE34001E8784 /* GameViewController.m */,
 				E4BA5E5A1DF9AE34001E8784 /* Main.storyboard */,
-				E4BA5E5D1DF9AE35001E8784 /* Assets.xcassets */,
 				E4BA5E5F1DF9AE35001E8784 /* LaunchScreen.storyboard */,
 				E4BA5E621DF9AE35001E8784 /* Info.plist */,
+				E4CF5F921E2E81490016A19D /* Assets.xcassets */,
 				E4BA5E4A1DF9AE34001E8784 /* Supporting Files */,
 			);
 			path = "Multimode Games";
@@ -291,7 +296,7 @@
 			files = (
 				E4BA5E5C1DF9AE34001E8784 /* Main.storyboard in Resources */,
 				E4BA5E851DF9B52E001E8784 /* Assets in Resources */,
-				E4BA5E5E1DF9AE35001E8784 /* Assets.xcassets in Resources */,
+				E4CF5F931E2E81490016A19D /* Assets.xcassets in Resources */,
 				E4BA5E611DF9AE35001E8784 /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -319,6 +324,7 @@
 			files = (
 				E4BA5E591DF9AE34001E8784 /* GameViewController.m in Sources */,
 				E4BA5E4F1DF9AE34001E8784 /* AppDelegate.m in Sources */,
+				E4CF5F901E2E7FB90016A19D /* SpaceGameScene.m in Sources */,
 				E48E031D1DF9EBC800D51223 /* BalloonGameScene.m in Sources */,
 				E48E03191DF9E41B00D51223 /* PlatformerGameScene.m in Sources */,
 				E4BA5E561DF9AE34001E8784 /* GameScene.m in Sources */,
@@ -470,7 +476,6 @@
 		E4BA5E7C1DF9AE35001E8784 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 6A295RFMN2;
 				INFOPLIST_FILE = "Multimode Games/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
@@ -484,7 +489,6 @@
 		E4BA5E7D1DF9AE35001E8784 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 6A295RFMN2;
 				INFOPLIST_FILE = "Multimode Games/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
