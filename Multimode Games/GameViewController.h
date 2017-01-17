@@ -11,12 +11,15 @@
 #import <GameplayKit/GameplayKit.h>
 #import <AVFoundation/AVFoundation.h>
 #import <CoreAudio/CoreAudioTypes.h>
+#import <CoreMotion/CoreMotion.h>
 
 @interface GameViewController : UIViewController
 {
     AVAudioRecorder* recorder;
     NSTimer* audioRecorderTimer;
-    double lowPassResults;
+    CMMotionManager* motionManager;
+    NSOperationQueue* operationQueue;
+    NSTimer* timer;
 }
 
 -(void)ChangeScene:(int)sceneID;

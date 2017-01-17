@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		989889E61E2E4B40006EC35C /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 989889E51E2E4B40006EC35C /* CoreMotion.framework */; };
 		E48E03191DF9E41B00D51223 /* PlatformerGameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = E48E03181DF9E41B00D51223 /* PlatformerGameScene.m */; };
 		E48E031D1DF9EBC800D51223 /* BalloonGameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = E48E031C1DF9EBC800D51223 /* BalloonGameScene.m */; };
 		E4BA5E4C1DF9AE34001E8784 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E4BA5E4B1DF9AE34001E8784 /* main.m */; };
@@ -40,6 +41,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		989889E51E2E4B40006EC35C /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		E48E03181DF9E41B00D51223 /* PlatformerGameScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PlatformerGameScene.m; path = Scenes/PlatformerGameScene.m; sourceTree = "<group>"; };
 		E48E031A1DF9E46900D51223 /* PlatformerGameScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PlatformerGameScene.h; path = Scenes/PlatformerGameScene.h; sourceTree = "<group>"; };
 		E48E031B1DF9EBB000D51223 /* BalloonGameScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BalloonGameScene.h; path = Scenes/BalloonGameScene.h; sourceTree = "<group>"; };
@@ -71,6 +73,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				989889E61E2E4B40006EC35C /* CoreMotion.framework in Frameworks */,
 				E4E24C771DFF666600AE57EB /* AVFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -173,6 +176,7 @@
 		E4E24C751DFF666500AE57EB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				989889E51E2E4B40006EC35C /* CoreMotion.framework */,
 				E4E24C761DFF666600AE57EB /* AVFoundation.framework */,
 			);
 			name = Frameworks;
@@ -245,6 +249,7 @@
 				TargetAttributes = {
 					E4BA5E461DF9AE34001E8784 = {
 						CreatedOnToolsVersion = 8.1;
+						DevelopmentTeam = 6A295RFMN2;
 						ProvisioningStyle = Automatic;
 					};
 					E4BA5E661DF9AE35001E8784 = {
@@ -466,10 +471,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 6A295RFMN2;
 				INFOPLIST_FILE = "Multimode Games/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "Teesside-University.Multimode-Games";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -477,10 +485,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 6A295RFMN2;
 				INFOPLIST_FILE = "Multimode Games/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "Teesside-University.Multimode-Games";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

@@ -21,6 +21,8 @@ static const uint32_t obstacleCategory = 0x1 << 1;
 
 -(void)InitializeScene
 {
+    obstacleSpeed = 4.0;
+    obstaclesAvoided = 0;
     NSLog(@"Platformer Game Scene initialized: %@", NSStringFromCGSize(self.frame.size));
     
     //Delegate shake event notification to a function
@@ -68,8 +70,9 @@ static const uint32_t obstacleCategory = 0x1 << 1;
     
     self.score = [SKLabelNode labelNodeWithFontNamed:@"Palatino-Bold"];
     
-    self.score.position = CGPointMake(self.frame.size.width * 0.85, self.frame.size.height * 0.90);
+    self.score.position = CGPointMake(self.frame.size.width * 0.82, self.frame.size.height * 0.92);
     self.score.zPosition = 999;
+    self.score.fontSize = (25 * self.frame.size.height)/375;;
     [self addChild:self.score];
     
     //Initialize Player
@@ -86,36 +89,38 @@ static const uint32_t obstacleCategory = 0x1 << 1;
 
 -(SKSpriteNode *) newPlayer
 {
+    CGSize playerSize = CGSizeMake((64 * self.frame.size.width)/667, (64 * self.frame.size.height)/375);
+    
     self.life = 3;
     self.lifeIcon1 = [[SKSpriteNode alloc]
                       initWithTexture: [SKTexture textureWithImageNamed:@"Platformer_Player"]
                       color:[SKColor grayColor]
-                      size:CGSizeMake(32, 32)];
+                      size:CGSizeMake(playerSize.width * 0.5, playerSize.height * 0.5)];
     
-    self.lifeIcon1.position = CGPointMake(16, self.frame.size.height - 20);
+    self.lifeIcon1.position = CGPointMake((16 * self.frame.size.width)/667, self.frame.size.height - (20 * self.frame.size.height)/375);
     [self addChild:self.lifeIcon1];
     
     self.lifeIcon2 = [[SKSpriteNode alloc]
                       initWithTexture: [SKTexture textureWithImageNamed:@"Platformer_Player"]
                       color:[SKColor grayColor]
-                      size:CGSizeMake(32, 32)];
+                      size:CGSizeMake(playerSize.width * 0.5, playerSize.height * 0.5)];
     
-    self.lifeIcon2.position = CGPointMake(50, self.frame.size.height - 20);
+    self.lifeIcon2.position = CGPointMake((50 * self.frame.size.width)/667, self.frame.size.height - (20 * self.frame.size.height)/375);
     [self addChild:self.lifeIcon2];
     
     self.lifeIcon3 = [[SKSpriteNode alloc]
                       initWithTexture: [SKTexture textureWithImageNamed:@"Platformer_Player"]
                       color:[SKColor grayColor]
-                      size:CGSizeMake(32, 32)];
+                      size:CGSizeMake(playerSize.width * 0.5, playerSize.height * 0.5)];
     
-    self.lifeIcon3.position = CGPointMake(85, self.frame.size.height - 20);
+    self.lifeIcon3.position = CGPointMake((85 * self.frame.size.width)/667, self.frame.size.height - (20 * self.frame.size.height)/375);
     [self addChild:self.lifeIcon3];
     
     //Size, color and texture
     SKSpriteNode* hull = [[SKSpriteNode alloc]
                           initWithTexture: [SKTexture textureWithImageNamed:@"Platformer_Player"]
                           color:[SKColor grayColor]
-                          size:CGSizeMake(64, 64)];
+                          size:playerSize];
     
     //Initial Position
     hull.position = CGPointMake(0, self.frame.size.height + 50);
@@ -155,7 +160,7 @@ static const uint32_t obstacleCategory = 0x1 << 1;
 {
     SKSpriteNode* obstacle;
     
-    CGSize obstacleSize = CGSizeMake(40, 40);
+    CGSize obstacleSize = CGSizeMake((40 * self.frame.size.width)/667, (40 * self.frame.size.height)/375);
     CGFloat XPos = self.frame.size.width + obstacleSize.height/2;
     
     CGFloat minYDown = (obstacleSize.height * 0.5) + self.ground1.size.height;
@@ -240,7 +245,14 @@ static const uint32_t obstacleCategory = 0x1 << 1;
                  [node removeFromParent];
                  obstaclesAvoided++;
                  if((int)obstaclesAvoided % 10 == 0)
-                     obstacleSpeed += obstacleSpeed * 0.2;
+                 {
+                     float spawnTime = 7.0 - obstacleSpeed;
+                     if(spawnTime > 0.5)
+                     {
+                         obstacleSpeed += obstacleSpeed * 0.2;
+                         [self StartSpawn:spawnTime :spawnTime];
+                     }
+                 }
              }
              else
              {
@@ -321,7 +333,7 @@ static const uint32_t obstacleCategory = 0x1 << 1;
     
     menuTitle.position = CGPointMake(self.frame.size.width/2, self.frame.size.height * 0.65);
     menuTitle.text = @"Game Over";
-    menuTitle.fontSize = 50.0;
+    menuTitle.fontSize = (40 * self.frame.size.height)/375;;
     
     [self addChild:menuTitle];
     
@@ -329,6 +341,7 @@ static const uint32_t obstacleCategory = 0x1 << 1;
     
     self.menu1.position = CGPointMake(self.frame.size.width/2, self.frame.size.height * 0.45);
     self.menu1.text = @"Reset game";
+    self.menu1.fontSize = (30 * self.frame.size.height)/375;
     
     [self addChild:self.menu1];
     
@@ -336,6 +349,7 @@ static const uint32_t obstacleCategory = 0x1 << 1;
     
     self.menu2.position = CGPointMake(self.frame.size.width/2, self.frame.size.height * 0.3);
     self.menu2.text = @"Main menu";
+    self.menu2.fontSize = (30 * self.frame.size.height)/375;
     
     [self addChild:self.menu2];
 }
@@ -351,18 +365,13 @@ static const uint32_t obstacleCategory = 0x1 << 1;
     NSLog(@"Shake detected");
     if(canJump)
     {
-        [self AddImpulse:250.0];
+        [self AddImpulse:300.0];
         canJump = FALSE;
     }
 }
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    if(canJump)
-    {
-        [self AddImpulse:250.0];
-        canJump = FALSE;
-    }
     if(self.gameOver)
     {
         UITouch* t = [touches anyObject];

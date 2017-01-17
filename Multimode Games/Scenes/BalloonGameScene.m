@@ -10,6 +10,7 @@
 
 CGFloat obstacleXSpeed = 1.0;
 CGFloat distanceTraveled = 0.0;
+CGFloat obstacles = 0.0;
 
 static const uint32_t playerCategory =   0x1 << 0;
 static const uint32_t obstacleCategory = 0x1 << 1;
@@ -19,6 +20,10 @@ BOOL startAnimation = FALSE;
 
 -(void)InitializeScene
 {
+    obstacleXSpeed = 1.0;
+    distanceTraveled = 0.0;
+    obstacles = 0.0;
+    
     NSLog(@"Balloon Game Scene initialized: %@", NSStringFromCGSize(self.frame.size));
     
     //Delegate blow event notification to a function
@@ -49,8 +54,10 @@ BOOL startAnimation = FALSE;
     
     self.score = [SKLabelNode labelNodeWithFontNamed:@"Papyrus-Condensed"];
     
-    self.score.position = CGPointMake(self.frame.size.width * 0.9, self.frame.size.height * 0.90);
+    self.score.position = CGPointMake(self.frame.size.width * 0.82, self.frame.size.height * 0.9);
     self.score.zPosition = 999;
+    self.score.fontSize = (40 * self.frame.size.height)/375;
+    
     [self addChild:self.score];
     
     //Initialize Player
@@ -62,44 +69,46 @@ BOOL startAnimation = FALSE;
     self.physicsWorld.contactDelegate = self;
     
     //Start obstacle spawn timer
-    [self StartSpawn:5.0 :5.0];
+    [self StartSpawn:5 :5.0];
 }
 
 -(SKSpriteNode *) newPlayer
 {
+    CGSize playerSize = CGSizeMake((64 * self.frame.size.width)/667, (64 * self.frame.size.height)/375);
+    
     self.life = 3;
     self.lifeIcon1 = [[SKSpriteNode alloc]
         initWithTexture: [SKTexture textureWithImageNamed:@"Balloon_Player"]
         color:[SKColor grayColor]
-        size:CGSizeMake(32, 32)];
+        size:CGSizeMake(playerSize.width * 0.5, playerSize.height * 0.5)];
     
     self.lifeIcon1.zPosition = 999;
-    self.lifeIcon1.position = CGPointMake(16, self.frame.size.height - 20);
+    self.lifeIcon1.position = CGPointMake((16 * self.frame.size.width)/667, self.frame.size.height - (20 * self.frame.size.height)/375);
     [self addChild:self.lifeIcon1];
     
     self.lifeIcon2 = [[SKSpriteNode alloc]
         initWithTexture: [SKTexture textureWithImageNamed:@"Balloon_Player"]
         color:[SKColor grayColor]
-        size:CGSizeMake(32, 32)];
+        size:CGSizeMake(playerSize.width * 0.5, playerSize.height * 0.5)];
     
     self.lifeIcon2.zPosition = 999;
-    self.lifeIcon2.position = CGPointMake(40, self.frame.size.height - 20);
+    self.lifeIcon2.position = CGPointMake((40 * self.frame.size.width)/667, self.frame.size.height - (20 * self.frame.size.height)/375);
     [self addChild:self.lifeIcon2];
     
     self.lifeIcon3 = [[SKSpriteNode alloc]
         initWithTexture: [SKTexture textureWithImageNamed:@"Balloon_Player"]
         color:[SKColor grayColor]
-        size:CGSizeMake(32, 32)];
+        size:CGSizeMake(playerSize.width * 0.5, playerSize.height * 0.5)];
     
     self.lifeIcon3.zPosition = 999;
-    self.lifeIcon3.position = CGPointMake(64, self.frame.size.height - 20);
+    self.lifeIcon3.position = CGPointMake((64 * self.frame.size.width)/667, self.frame.size.height - (20 * self.frame.size.height)/375);
     [self addChild:self.lifeIcon3];
     
     //Size, color and texture
     SKSpriteNode* hull = [[SKSpriteNode alloc]
         initWithTexture: [SKTexture textureWithImageNamed:@"Balloon_Player"]
         color:[SKColor grayColor]
-        size:CGSizeMake(64, 64)];
+        size:playerSize];
     
     //Initial Position
     hull.position = CGPointMake(0, self.frame.size.height + 50);
@@ -139,7 +148,7 @@ BOOL startAnimation = FALSE;
 {
     SKSpriteNode* obstacle;
     
-    CGSize obstacleSize = CGSizeMake(90, 156);
+    CGSize obstacleSize = CGSizeMake((90 * self.frame.size.width)/667, (156 * self.frame.size.height)/375);
     CGFloat XPos = self.frame.size.width + obstacleSize.height/2;
     
     CGFloat minYUp = 0.0;
@@ -189,21 +198,23 @@ BOOL startAnimation = FALSE;
     
     menuTitle.position = CGPointMake(self.frame.size.width/2, self.frame.size.height * 0.65);
     menuTitle.text = @"Game Over";
-    menuTitle.fontSize = 50.0;
+    menuTitle.fontSize = (50 * self.frame.size.height)/375;
     
     [self addChild:menuTitle];
     
     self.menu1 = [SKLabelNode labelNodeWithFontNamed:@"Papyrus-Condensed"];
     
-    self.menu1.position = CGPointMake(self.frame.size.width/2, self.frame.size.height * 0.45);
+    self.menu1.position = CGPointMake(self.frame.size.width/2, self.frame.size.height * 0.50);
     self.menu1.text = @"Reset game";
+    self.menu1.fontSize = (35 * self.frame.size.height)/375;
     
     [self addChild:self.menu1];
     
     self.menu2 = [SKLabelNode labelNodeWithFontNamed:@"Papyrus-Condensed"];
     
-    self.menu2.position = CGPointMake(self.frame.size.width/2, self.frame.size.height * 0.3);
+    self.menu2.position = CGPointMake(self.frame.size.width/2, self.frame.size.height * 0.35);
     self.menu2.text = @"Main menu";
+    self.menu2.fontSize = (35 * self.frame.size.height)/375;
     
     [self addChild:self.menu2];
 }
@@ -251,12 +262,23 @@ BOOL startAnimation = FALSE;
         [self enumerateChildNodesWithName:@"obstacle" usingBlock:^(SKNode *node, BOOL *stop)
          {
              //Delete non visible obstacles
-             if(node.position.x < -150.0)
-                 [node removeFromParent];
-             else
+             if(node.position.x < -50.0)
              {
-                 node.position = CGPointMake(node.position.x - obstacleXSpeed, node.position.y);
+                 obstacles++;
+                 if((int)obstacles % 5 == 0)
+                 {
+                    float spawnTime = 5.0 - obstacleXSpeed;
+                    if(spawnTime > 0.5)
+                    {
+                        obstacleXSpeed += obstacleXSpeed * 0.2;
+                        [self StartSpawn:spawnTime :spawnTime];
+                    }
+                 }
+                 [node removeFromParent];
+
              }
+             else
+                 node.position = CGPointMake(node.position.x - obstacleXSpeed, node.position.y);
         }];
     }
 }
@@ -277,9 +299,6 @@ BOOL startAnimation = FALSE;
     }
     
     [self TakeDamage];
-    
-    //NSLog(@"Detected collision");
-    //if((firstBody.categoryBitMask & playerCategory) != 0)
 }
 
 -(void)TakeDamage
@@ -330,15 +349,13 @@ BOOL startAnimation = FALSE;
 
 -(void)OnBlowDetected:(NSNotification *) notification
 {
-    [self AddImpulse:25.0];
+    [self AddImpulse:50.0];
     NSLog(@"Blow detected");
 }
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    if(!self.gameOver)
-        [self AddImpulse:200.0];
-    else
+    if(self.gameOver)
     {
         UITouch* t = [touches anyObject];
         

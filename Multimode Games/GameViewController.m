@@ -16,6 +16,9 @@
 {
     recorder = nil;
     audioRecorderTimer = nil;
+    motionManager = nil;
+    operationQueue = nil;
+    timer = nil;
 }
 
 - (void)viewDidLoad
@@ -24,31 +27,39 @@
 
     SKView *skView = (SKView *)self.view;
     
-    skView.showsFPS = YES;
-    skView.showsDrawCount = YES;
-    skView.showsNodeCount = YES;
+    //skView.showsFPS = YES;
+    //skView.showsDrawCount = YES;
+    //skView.showsNodeCount = YES;
     
     if(!skView.scene)
     {
-        [self ChangeScene:2];
+        [self ChangeScene:3];
     }
 }
 
-- (BOOL)shouldAutorotate
+-(BOOL)shouldAutorotate
 {
-    return YES;
+    return NO;
+}
+-(UIInterfaceOrientationMask)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskPortrait;
+}
+-(UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
+{
+    return UIInterfaceOrientationPortrait;
 }
 
-- (UIInterfaceOrientationMask)supportedInterfaceOrientations
-{
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
-    {
-        return UIInterfaceOrientationMaskAllButUpsideDown;
-    } else
-    {
-        return UIInterfaceOrientationMaskAll;
-    }
-}
+//- (UIInterfaceOrientationMask)supportedInterfaceOrientations
+//{
+//    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
+//    {
+//        return UIInterfaceOrientationMaskAllButUpsideDown;
+//    } else
+//    {
+//        return UIInterfaceOrientationMaskAll;
+//    }
+//}
 
 - (void)didReceiveMemoryWarning
 {
@@ -105,6 +116,8 @@
     if(recorder)
     {
         [recorder prepareToRecord];
+        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
+        [[AVAudioSession sharedInstance] setActive:YES error:nil];
         recorder.meteringEnabled = TRUE;
         [recorder record];
         audioRecorderTimer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(AudioRecorderTimerCallback:) userInfo:nil repeats:TRUE];
@@ -123,10 +136,21 @@
     //lowPassResults = alpha * peakPowerForChannel + (1.0 - alpha) * lowPassResults;
     
     //if(lowPassResults > 2.50)
-    if([recorder averagePowerForChannel:0] > 4.0 && [recorder peakPowerForChannel:0] > 12.0)
+    if([recorder averagePowerForChannel:0] > -5.0 && [recorder peakPowerForChannel:0] > -0.05)
         [[NSNotificationCenter defaultCenter] postNotificationName:@"blow" object:self];
     
     //NSLog(@"Average input: %f Peak input: %f Low Pass Result: %f", [recorder averagePowerForChannel:0], [recorder peakPowerForChannel:0], lowPassResults);
+}
+
+-(void)GyroscopeUpdate
+{
+    CMDeviceMotion* dm = motionManager.deviceMotion;
+    CMAttitude* attitude = dm.attitude;
+    int pitch = 180.0 * attitude.pitch / M_PI;
+    NSDictionary* dictionary = @{@"gyroscope":@(pitch)};
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"gyroscope" object:self userInfo:dictionary];
+
+    
 }
 
 -(void)ChangeScene:(int)sceneID
@@ -140,6 +164,9 @@
     {
         recorder = nil;
         audioRecorderTimer = nil;
+        motionManager = nil;
+        operationQueue = nil;
+        timer = nil;
     }
     
     switch(sceneID)
@@ -151,6 +178,13 @@
         case 2:
             NewScene = [[PlatformerGameScene alloc] initWithSize:skView.bounds.size];
             break;
+        case 3:
+            motionManager = [[CMMotionManager alloc] init];
+            motionManager.deviceMotionUpdateInterval = 1 / 60.0;
+            [motionManager startDeviceMotionUpdates];
+            timer = [NSTimer scheduledTimerWithTimeInterval:1.0/60.0 target:self selector:@selector(GyroscopeUpdate) userInfo:nil repeats:TRUE];
+            NewScene = [[GameScene alloc] initWithSize:skView.bounds.size];
+        break;
         default:
            NewScene = [[GameScene alloc] initWithSize:skView.bounds.size];
         break;

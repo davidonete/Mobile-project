@@ -30,7 +30,18 @@
     }
 }
 
--(void)InitializeScene {}
+-(void)InitializeScene
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(GyroscopeUpdate:) name:@"gyroscope" object:nil];
+
+}
+
+-(void)GyroscopeUpdate:(NSNotification*) notification
+{
+    NSDictionary* dictionary = notification.userInfo;
+    NSNumber* number = (NSNumber*)dictionary[@"gyroscope"];
+    NSLog(@"%i", number.intValue);
+}
 
 -(void)ResetScene {}
 
