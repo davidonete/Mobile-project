@@ -284,37 +284,41 @@ BOOL startAnimation = FALSE;
 
 -(void)TakeDamage
 {
-    self.life--;
-    if(self.life < 0)
-        [self GameOver];
-    else
+    if(!self.invincible)
     {
-        if(self.life == 2)
-            [self.lifeIcon3 removeFromParent];
-        else if(self.life == 1)
-            [self.lifeIcon2 removeFromParent];
-        else if(self.life == 0)
-            [self.lifeIcon1 removeFromParent];
-        
-        self.player.physicsBody.velocity = CGVectorMake(0.0, 0.0);
-        self.player.position = CGPointMake(200, self.player.position.y);
-        
-        self.player.physicsBody.collisionBitMask = 0;
-        self.player.physicsBody.contactTestBitMask = 0;
-        
-        SKAction *animation = [SKAction sequence:@[
-            [SKAction runBlock:^(void) { self.player.hidden = TRUE; }],
-            [SKAction waitForDuration:0.2],
-            [SKAction runBlock:^(void) { self.player.hidden = FALSE; }],
-            [SKAction waitForDuration:0.2]]];
-        
-        
-        [self runAction:[SKAction repeatAction:animation count:7]
-              completion:^(void)
-              {
-                  self.player.physicsBody.collisionBitMask = obstacleCategory;
-                  self.player.physicsBody.contactTestBitMask = obstacleCategory;
-              }];
+        self.life--;
+        if(self.life < 0)
+            [self GameOver];
+        else
+        {
+            if(self.life == 2)
+                [self.lifeIcon3 removeFromParent];
+            else if(self.life == 1)
+                [self.lifeIcon2 removeFromParent];
+            else if(self.life == 0)
+                [self.lifeIcon1 removeFromParent];
+            
+            self.player.physicsBody.velocity = CGVectorMake(0.0, 0.0);
+            self.player.position = CGPointMake(200, self.player.position.y);
+            
+            self.player.physicsBody.collisionBitMask = 0;
+            self.player.physicsBody.contactTestBitMask = 0;
+            
+            SKAction *animation = [SKAction sequence:@[
+                                                       [SKAction runBlock:^(void) { self.player.hidden = TRUE; }],
+                                                       [SKAction waitForDuration:0.2],
+                                                       [SKAction runBlock:^(void) { self.player.hidden = FALSE; }],
+                                                       [SKAction waitForDuration:0.2]]];
+            self.invincible = TRUE;
+            
+            [self runAction:[SKAction repeatAction:animation count:7]
+                 completion:^(void)
+             {
+                 self.player.physicsBody.collisionBitMask = obstacleCategory;
+                 self.player.physicsBody.contactTestBitMask = obstacleCategory;
+                 self.invincible = FALSE;
+             }];
+        }
     }
 }
 
@@ -341,13 +345,9 @@ BOOL startAnimation = FALSE;
         CGPoint touchLocation = [t locationInNode:self.scene];
         
         if(CGRectContainsPoint(self.menu1.frame, touchLocation))
-        {
             [self ChangeScene:1];
-        }
         if(CGRectContainsPoint(self.menu2.frame, touchLocation))
-        {
             [self ChangeScene:0];
-        }
     }
 }
 

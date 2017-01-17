@@ -24,6 +24,7 @@
 @property (nonatomic) SKLabelNode* score;
 
 @property (nonatomic) BOOL gameOver;
+@property (nonatomic) BOOL invincible;
 @property (nonatomic) BOOL sceneInitialized;
 @property (nonatomic) GLint life;
 @property GameViewController* viewController;
