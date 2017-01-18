@@ -29,9 +29,14 @@
     CLLocationCoordinate2D userCoords;
     CLLocationCoordinate2D destinationCoords;
     BOOL firstLocationUpdate;
+    BOOL gameOver;
     __weak IBOutlet UILabel *DistanceText;
     __weak IBOutlet UILabel *TimeLeftText;
     __weak IBOutlet UILabel *GameOver;
+    __weak IBOutlet UIButton *replayButton;
+    __weak IBOutlet UIButton *MainMenuButton;
+    
+    float timeLeft;
 }
 
 -(void)ChangeScene:(int)sceneID;

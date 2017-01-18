@@ -41,12 +41,12 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CYA-ff-mfD">
-                                <rect key="frame" x="452.5" y="307" width="119" height="53"/>
+                                <rect key="frame" x="453" y="277" width="119" height="53"/>
                                 <color key="backgroundColor" red="0.99161874297954067" green="1" blue="0.98645454007342315" alpha="1" colorSpace="calibratedRGB"/>
                                 <rect key="contentStretch" x="1" y="1" width="1" height="1"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="53" id="rZh-8S-Gjq"/>
-                                    <constraint firstAttribute="width" constant="119" id="zFK-vh-cWY"/>
+                                    <constraint firstAttribute="width" constant="119" id="9dO-Cj-mWF"/>
+                                    <constraint firstAttribute="height" constant="53" id="afi-VS-ilE"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                 <state key="normal" title="Replay">
@@ -58,13 +58,17 @@
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
                                 </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="ReplayPressed:" destination="BV1-FR-VrT" eventType="touchDown" id="tZo-cx-2NG"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6AD-Fl-9CK">
-                                <rect key="frame" x="425.5" y="395" width="172" height="53"/>
+                                <rect key="frame" x="426" y="353" width="172" height="53"/>
                                 <color key="backgroundColor" red="0.99161874299999997" green="1" blue="0.9864545401" alpha="1" colorSpace="calibratedRGB"/>
                                 <rect key="contentStretch" x="1" y="1" width="1" height="1"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="172" id="jbL-qw-Isx"/>
+                                    <constraint firstAttribute="height" constant="53" id="3cn-Gs-szz"/>
+                                    <constraint firstAttribute="width" constant="172" id="89Y-Sx-HWF"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                 <state key="normal" title="Main menu">
@@ -76,11 +80,14 @@
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
                                 </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="MainMenuPressed:" destination="BV1-FR-VrT" eventType="touchDown" id="4yn-pa-O5S"/>
+                                </connections>
                             </button>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Game Over" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I1W-vJ-fjU">
-                                <rect key="frame" x="400" y="199" width="263" height="100"/>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Game Over" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I1W-vJ-fjU">
+                                <rect key="frame" x="381" y="169" width="263" height="100"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="225" id="UvB-YZ-pmV"/>
+                                    <constraint firstAttribute="width" constant="263" id="PCN-Rg-Bgl"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="45"/>
                                 <color key="textColor" red="0.98505211719999997" green="0.9918181184" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -91,28 +98,29 @@
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="bZd-Qd-DnR" firstAttribute="top" secondItem="8aa-yV-Osq" secondAttribute="bottom" constant="8" id="2hM-Xm-FfK"/>
-                            <constraint firstItem="6AD-Fl-9CK" firstAttribute="centerX" secondItem="CYA-ff-mfD" secondAttribute="centerX" id="8lX-je-oCy"/>
-                            <constraint firstItem="qHh-Mt-9TT" firstAttribute="top" secondItem="CYA-ff-mfD" secondAttribute="bottom" constant="408" id="8uZ-fb-IQ0"/>
-                            <constraint firstItem="I1W-vJ-fjU" firstAttribute="top" secondItem="8aa-yV-Osq" secondAttribute="bottom" constant="179" id="9b9-Dy-04G"/>
                             <constraint firstItem="GFO-vS-vmc" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" id="Ahw-fl-KZy"/>
                             <constraint firstItem="GFO-vS-vmc" firstAttribute="top" secondItem="8aa-yV-Osq" secondAttribute="bottom" id="Esk-1b-rcK"/>
                             <constraint firstItem="bZd-Qd-DnR" firstAttribute="trailing" secondItem="3se-qz-xqx" secondAttribute="trailingMargin" id="FAU-NF-qa9"/>
-                            <constraint firstItem="6AD-Fl-9CK" firstAttribute="top" secondItem="CYA-ff-mfD" secondAttribute="bottom" constant="35" id="Ffc-zD-vNX"/>
+                            <constraint firstItem="6AD-Fl-9CK" firstAttribute="top" secondItem="CYA-ff-mfD" secondAttribute="bottom" constant="23" id="PRO-Tb-ErI"/>
+                            <constraint firstItem="I1W-vJ-fjU" firstAttribute="centerX" secondItem="f5Q-j8-cW2" secondAttribute="centerX" id="RXL-g9-eEP"/>
+                            <constraint firstItem="CYA-ff-mfD" firstAttribute="top" secondItem="I1W-vJ-fjU" secondAttribute="bottom" constant="8" symbolic="YES" id="VdW-T0-pB6"/>
                             <constraint firstAttribute="trailing" secondItem="f5Q-j8-cW2" secondAttribute="trailing" id="Wpg-tM-3yK"/>
-                            <constraint firstItem="I1W-vJ-fjU" firstAttribute="centerX" secondItem="f5Q-j8-cW2" secondAttribute="centerX" id="XpX-kg-B2g"/>
-                            <constraint firstItem="qHh-Mt-9TT" firstAttribute="top" secondItem="6AD-Fl-9CK" secondAttribute="bottom" constant="320" id="eF6-ef-NUV"/>
+                            <constraint firstItem="CYA-ff-mfD" firstAttribute="centerX" secondItem="6AD-Fl-9CK" secondAttribute="centerX" id="aTY-iE-Y12"/>
                             <constraint firstItem="qHh-Mt-9TT" firstAttribute="top" secondItem="f5Q-j8-cW2" secondAttribute="bottom" id="h3N-zv-rKW"/>
+                            <constraint firstItem="I1W-vJ-fjU" firstAttribute="centerX" secondItem="CYA-ff-mfD" secondAttribute="centerX" id="n4y-il-0m2"/>
                             <constraint firstItem="f5Q-j8-cW2" firstAttribute="top" secondItem="3se-qz-xqx" secondAttribute="top" id="o2Y-ha-akm"/>
-                            <constraint firstItem="CYA-ff-mfD" firstAttribute="centerX" secondItem="I1W-vJ-fjU" secondAttribute="centerX" id="oc4-rd-ehm"/>
-                            <constraint firstItem="CYA-ff-mfD" firstAttribute="top" secondItem="I1W-vJ-fjU" secondAttribute="bottom" constant="8" symbolic="YES" id="s2T-V1-rtv"/>
+                            <constraint firstItem="qHh-Mt-9TT" firstAttribute="top" secondItem="6AD-Fl-9CK" secondAttribute="bottom" constant="362" id="obc-e7-Fq0"/>
+                            <constraint firstItem="I1W-vJ-fjU" firstAttribute="top" secondItem="8aa-yV-Osq" secondAttribute="bottom" constant="149" id="qTI-Nx-IEf"/>
                             <constraint firstItem="f5Q-j8-cW2" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leading" id="tqT-8f-vJa"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="DistanceText" destination="bZd-Qd-DnR" id="RqX-sK-esy"/>
                         <outlet property="GameOver" destination="I1W-vJ-fjU" id="wu9-pW-qMB"/>
+                        <outlet property="MainMenuButton" destination="6AD-Fl-9CK" id="QY5-Um-G0J"/>
                         <outlet property="TimeLeftText" destination="GFO-vS-vmc" id="Sso-8B-bfL"/>
                         <outlet property="myMapView" destination="f5Q-j8-cW2" id="wR9-Il-Vso"/>
+                        <outlet property="replayButton" destination="CYA-ff-mfD" id="a67-ZN-C0f"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>

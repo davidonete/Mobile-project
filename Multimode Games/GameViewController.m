@@ -31,9 +31,16 @@
 {
     [super viewDidLoad];
 
+    gameOver = TRUE;
+    TimeLeftText.hidden = TRUE;
     DistanceText.hidden = TRUE;
+    GameOver.hidden = TRUE;
+    replayButton.hidden = TRUE;
+    MainMenuButton.hidden = TRUE;
+    
     myMapView.hidden = TRUE;
     myMapView.delegate = self;
+    
     SKView *skView = (SKView *)self.view;
     
     //skView.showsFPS = YES;
@@ -182,10 +189,25 @@
     return (rand() / (CGFloat) RAND_MAX) * (max - min) + min;
 }
 
+-(void)GPSUpdate
+{
+    timeLeft--;
+    TimeLeftText.text = [NSString stringWithFormat:@"Time left: %.0f", timeLeft];
+    
+    if(timeLeft <= 0.0)
+        [self GameOver];
+}
+
 -(void) LocationInit
 {
-    firstLocationUpdate = FALSE;
+    timeLeft = 200.0;
+    timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(GPSUpdate) userInfo:nil repeats:TRUE];
+    
+    gameOver = FALSE;
+    TimeLeftText.hidden = FALSE;
     DistanceText.hidden = FALSE;
+    
+    firstLocationUpdate = FALSE;
     myMapView.hidden = FALSE;
     myMapView.showsUserLocation = YES;
     myMapView.showsBuildings = YES;
@@ -225,28 +247,90 @@
         currentRoute = [response.routes firstObject];
         DistanceText.text = [NSString stringWithFormat:@"Distance: %.0f", currentRoute.distance];
         
-        if(currentRoute.distance < 10.0)
+        if(currentRoute.distance < 80.0)
             [self GameOver];
         
         [self AddRouteToMap:currentRoute];
     }];
 }
 
+-(CLLocationCoordinate2D)GetLastCoordinateOfRoute:(MKRoute*) route
+{
+    NSUInteger pointCount = route.polyline.pointCount;
+    CLLocationCoordinate2D *routeCoordinates = malloc(pointCount * sizeof(CLLocationCoordinate2D));
+    
+    [route.polyline getCoordinates:routeCoordinates range:NSMakeRange(0, pointCount)];
+
+    CLLocationCoordinate2D coord = routeCoordinates[pointCount-1];
+    
+    free(routeCoordinates);
+    return coord;
+}
+
 -(void)GameOver
 {
+    [timer invalidate];
+    gameOver = TRUE;
+    GameOver.hidden = FALSE;
+    replayButton.hidden = FALSE;
+    MainMenuButton.hidden = FALSE;
     
+    [locationManager stopUpdatingLocation];
+}
+
+- (IBAction)MainMenuPressed:(id)sender
+{
+    gameOver = TRUE;
+    TimeLeftText.hidden = TRUE;
+    DistanceText.hidden = TRUE;
+    GameOver.hidden = TRUE;
+    replayButton.hidden = TRUE;
+    MainMenuButton.hidden = TRUE;
+    myMapView.hidden = TRUE;
+    
+    locationManager = nil;
+    routeOverlay = nil;
+    currentRoute = nil;
+    
+    float bearing = [self Random:0 :100];
+    destinationCoords = [self locationWithBearing:bearing distance:150 fromLocation:userCoords];
+    [self UpdateMapDirections:destinationCoords user:userCoords];
+    
+    [self ChangeScene:0];
+}
+
+- (IBAction)ReplayPressed:(id)sender
+{
+    gameOver = TRUE;
+    TimeLeftText.hidden = TRUE;
+    DistanceText.hidden = TRUE;
+    GameOver.hidden = TRUE;
+    replayButton.hidden = TRUE;
+    MainMenuButton.hidden = TRUE;
+    myMapView.hidden = TRUE;
+    
+    locationManager = nil;
+    routeOverlay = nil;
+    currentRoute = nil;
+    
+    float bearing = [self Random:0 :100];
+    destinationCoords = [self locationWithBearing:bearing distance:150 fromLocation:userCoords];
+    [self UpdateMapDirections:destinationCoords user:userCoords];
+    [self ChangeScene:4];
 }
 
 -(void)AddRouteToMap:(MKRoute*)route
 {
+    [myMapView removeOverlays:myMapView.overlays];
     routeOverlay = route.polyline;
     
-    [myMapView removeOverlay:routeOverlay];
     [myMapView addOverlay:routeOverlay];
 }
 
 -(void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
 {
+    if(!gameOver)
+    {
     MKMapCamera *camera = [MKMapCamera cameraLookingAtCenterCoordinate: userLocation.coordinate fromEyeCoordinate:CLLocationCoordinate2DMake(userLocation.coordinate.latitude, userLocation.coordinate.longitude) eyeAltitude:500];
     
     [mapView setCamera:camera animated:YES];
@@ -256,12 +340,14 @@
     if(!firstLocationUpdate)
     {
         float bearing = [self Random:0 :100];
-        destinationCoords = [self locationWithBearing:bearing distance:200 fromLocation:userCoords];
+        destinationCoords = [self locationWithBearing:bearing distance:150 fromLocation:userCoords];
         firstLocationUpdate = TRUE;
+        //[self UpdateMapDirections:destinationCoords user:userCoords];
+        //destinationCoords = [self GetLastCoordinateOfRoute:currentRoute];
     }
-    [self UpdateMapDirections:userCoords user:destinationCoords];
+    [self UpdateMapDirections:destinationCoords user:userCoords];
+    }
 }
-
 
 -(MKOverlayRenderer*) mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay
 {
@@ -276,6 +362,9 @@
     SKView* skView = (SKView *)self.view;
     GameScene* NewScene;
     SKTransition* fade = [SKTransition fadeWithDuration:0.5];
+    
+    [audioRecorderTimer invalidate];
+    [timer invalidate];
     
     //Delete previous recorder instance (?)
     if(recorder)
