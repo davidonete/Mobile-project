@@ -21,12 +21,19 @@
     motionManager = nil;
     operationQueue = nil;
     timer = nil;
+    locationManager = nil;
+    myMapView = nil;
+    routeOverlay = nil;
+    currentRoute = nil;
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 
+    DistanceText.hidden = TRUE;
+    myMapView.hidden = TRUE;
+    myMapView.delegate = self;
     SKView *skView = (SKView *)self.view;
     
     //skView.showsFPS = YES;
@@ -151,8 +158,117 @@
     int pitch = 180.0 * attitude.pitch / M_PI;
     NSDictionary* dictionary = @{@"gyroscope":@(pitch)};
     [[NSNotificationCenter defaultCenter] postNotificationName:@"gyroscope" object:self userInfo:dictionary];
+}
 
+- (CLLocationCoordinate2D) locationWithBearing:(float)bearing distance:(float)distanceMeters fromLocation:(CLLocationCoordinate2D)origin {
+    CLLocationCoordinate2D target;
+    const double distRadians = distanceMeters / (6372797.6); // earth radius in meters
     
+    float lat1 = origin.latitude * M_PI / 180;
+    float lon1 = origin.longitude * M_PI / 180;
+    
+    float lat2 = asin( sin(lat1) * cos(distRadians) + cos(lat1) * sin(distRadians) * cos(bearing));
+    float lon2 = lon1 + atan2( sin(bearing) * sin(distRadians) * cos(lat1),
+                              cos(distRadians) - sin(lat1) * sin(lat2) );
+    
+    target.latitude = lat2 * 180 / M_PI;
+    target.longitude = lon2 * 180 / M_PI;
+    
+    return target;
+}
+
+-(CGFloat)Random:(CGFloat)min :(CGFloat)max
+{
+    return (rand() / (CGFloat) RAND_MAX) * (max - min) + min;
+}
+
+-(void) LocationInit
+{
+    firstLocationUpdate = FALSE;
+    DistanceText.hidden = FALSE;
+    myMapView.hidden = FALSE;
+    myMapView.showsUserLocation = YES;
+    myMapView.showsBuildings = YES;
+    myMapView.mapType = MKMapTypeSatellite;
+    
+    locationManager = [CLLocationManager new];
+    if([locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)])
+        [locationManager requestWhenInUseAuthorization];
+    
+    [locationManager startUpdatingLocation];
+}
+
+-(void)UpdateMapDirections:(CLLocationCoordinate2D)destinationLocation user: (CLLocationCoordinate2D) sourceLocation
+{
+    MKPlacemark *destinationPlacemark = [[MKPlacemark alloc] initWithCoordinate:destinationLocation];
+    MKPlacemark *sourcePlacemark = [[MKPlacemark alloc] initWithCoordinate:sourceLocation];
+    
+    MKDirectionsRequest *request = [MKDirectionsRequest new];
+    request.transportType = MKDirectionsTransportTypeWalking;
+    
+    MKMapItem *source = [[MKMapItem alloc] initWithPlacemark:sourcePlacemark];
+    MKMapItem *destination = [[MKMapItem alloc] initWithPlacemark:destinationPlacemark];
+    
+    [request setSource:source];
+    [request setDestination:destination];
+    
+    MKDirections *direction = [[MKDirections alloc] initWithRequest:request];
+    
+    [direction calculateDirectionsWithCompletionHandler:^(MKDirectionsResponse *response, NSError *error) {
+        
+        if(error)
+        {
+            NSLog(@"Error doing direction");
+            return;
+        }
+
+        currentRoute = [response.routes firstObject];
+        DistanceText.text = [NSString stringWithFormat:@"Distance: %.0f", currentRoute.distance];
+        
+        if(currentRoute.distance < 10.0)
+            [self GameOver];
+        
+        [self AddRouteToMap:currentRoute];
+    }];
+}
+
+-(void)GameOver
+{
+    
+}
+
+-(void)AddRouteToMap:(MKRoute*)route
+{
+    routeOverlay = route.polyline;
+    
+    [myMapView removeOverlay:routeOverlay];
+    [myMapView addOverlay:routeOverlay];
+}
+
+-(void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
+{
+    MKMapCamera *camera = [MKMapCamera cameraLookingAtCenterCoordinate: userLocation.coordinate fromEyeCoordinate:CLLocationCoordinate2DMake(userLocation.coordinate.latitude, userLocation.coordinate.longitude) eyeAltitude:500];
+    
+    [mapView setCamera:camera animated:YES];
+    
+    userCoords = userLocation.coordinate;
+    
+    if(!firstLocationUpdate)
+    {
+        float bearing = [self Random:0 :100];
+        destinationCoords = [self locationWithBearing:bearing distance:200 fromLocation:userCoords];
+        firstLocationUpdate = TRUE;
+    }
+    [self UpdateMapDirections:userCoords user:destinationCoords];
+}
+
+
+-(MKOverlayRenderer*) mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay
+{
+    MKPolylineRenderer *renderer = [[MKPolylineRenderer alloc] initWithOverlay:overlay];
+    renderer.strokeColor = [UIColor redColor];
+    renderer.lineWidth = 4.0;
+    return renderer;
 }
 
 -(void)ChangeScene:(int)sceneID
@@ -189,6 +305,9 @@
             [motionManager startDeviceMotionUpdates];
             timer = [NSTimer scheduledTimerWithTimeInterval:1.0/60.0 target:self selector:@selector(GyroscopeUpdate) userInfo:nil repeats:TRUE];
             NewScene = [[SpaceGameScene alloc] initWithSize:skView.bounds.size];
+        break;
+        case 4:
+            [self LocationInit];
         break;
         default:
            NewScene = [[GameScene alloc] initWithSize:skView.bounds.size];

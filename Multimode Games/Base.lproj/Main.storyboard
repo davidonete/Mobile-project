@@ -1,26 +1,124 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11134" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BV1-FR-VrT">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BV1-FR-VrT">
+    <device id="ipad9_7" orientation="landscape">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11106"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Game View Controller-->
         <scene sceneID="tXr-a1-R10">
             <objects>
-                <viewController id="BV1-FR-VrT" customClass="GameViewController" customModuleProvider="" sceneMemberID="viewController">
+                <viewController id="BV1-FR-VrT" customClass="GameViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="8aa-yV-Osq"/>
                         <viewControllerLayoutGuide type="bottom" id="qHh-Mt-9TT"/>
                     </layoutGuides>
                     <view key="view" multipleTouchEnabled="YES" contentMode="scaleToFill" id="3se-qz-xqx" customClass="SKView">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="f5Q-j8-cW2">
+                                <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
+                                <connections>
+                                    <outlet property="delegate" destination="BV1-FR-VrT" id="Cl9-T4-CTG"/>
+                                </connections>
+                            </mapView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Distance: 0" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bZd-Qd-DnR">
+                                <rect key="frame" x="779" y="28" width="225" height="100"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="40"/>
+                                <color key="textColor" red="0.98505211723011232" green="0.99181811842174972" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Time Left: 0" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GFO-vS-vmc">
+                                <rect key="frame" x="20" y="20" width="225" height="100"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="40"/>
+                                <color key="textColor" red="0.98505211719999997" green="0.9918181184" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CYA-ff-mfD">
+                                <rect key="frame" x="452.5" y="307" width="119" height="53"/>
+                                <color key="backgroundColor" red="0.99161874297954067" green="1" blue="0.98645454007342315" alpha="1" colorSpace="calibratedRGB"/>
+                                <rect key="contentStretch" x="1" y="1" width="1" height="1"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="53" id="rZh-8S-Gjq"/>
+                                    <constraint firstAttribute="width" constant="119" id="zFK-vh-cWY"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                <state key="normal" title="Replay">
+                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="20"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6AD-Fl-9CK">
+                                <rect key="frame" x="425.5" y="395" width="172" height="53"/>
+                                <color key="backgroundColor" red="0.99161874299999997" green="1" blue="0.9864545401" alpha="1" colorSpace="calibratedRGB"/>
+                                <rect key="contentStretch" x="1" y="1" width="1" height="1"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="172" id="jbL-qw-Isx"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                <state key="normal" title="Main menu">
+                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="20"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Game Over" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I1W-vJ-fjU">
+                                <rect key="frame" x="400" y="199" width="263" height="100"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="225" id="UvB-YZ-pmV"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="45"/>
+                                <color key="textColor" red="0.98505211719999997" green="0.9918181184" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                                <color key="shadowColor" cocoaTouchSystemColor="darkTextColor"/>
+                            </label>
+                        </subviews>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="bZd-Qd-DnR" firstAttribute="top" secondItem="8aa-yV-Osq" secondAttribute="bottom" constant="8" id="2hM-Xm-FfK"/>
+                            <constraint firstItem="6AD-Fl-9CK" firstAttribute="centerX" secondItem="CYA-ff-mfD" secondAttribute="centerX" id="8lX-je-oCy"/>
+                            <constraint firstItem="qHh-Mt-9TT" firstAttribute="top" secondItem="CYA-ff-mfD" secondAttribute="bottom" constant="408" id="8uZ-fb-IQ0"/>
+                            <constraint firstItem="I1W-vJ-fjU" firstAttribute="top" secondItem="8aa-yV-Osq" secondAttribute="bottom" constant="179" id="9b9-Dy-04G"/>
+                            <constraint firstItem="GFO-vS-vmc" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" id="Ahw-fl-KZy"/>
+                            <constraint firstItem="GFO-vS-vmc" firstAttribute="top" secondItem="8aa-yV-Osq" secondAttribute="bottom" id="Esk-1b-rcK"/>
+                            <constraint firstItem="bZd-Qd-DnR" firstAttribute="trailing" secondItem="3se-qz-xqx" secondAttribute="trailingMargin" id="FAU-NF-qa9"/>
+                            <constraint firstItem="6AD-Fl-9CK" firstAttribute="top" secondItem="CYA-ff-mfD" secondAttribute="bottom" constant="35" id="Ffc-zD-vNX"/>
+                            <constraint firstAttribute="trailing" secondItem="f5Q-j8-cW2" secondAttribute="trailing" id="Wpg-tM-3yK"/>
+                            <constraint firstItem="I1W-vJ-fjU" firstAttribute="centerX" secondItem="f5Q-j8-cW2" secondAttribute="centerX" id="XpX-kg-B2g"/>
+                            <constraint firstItem="qHh-Mt-9TT" firstAttribute="top" secondItem="6AD-Fl-9CK" secondAttribute="bottom" constant="320" id="eF6-ef-NUV"/>
+                            <constraint firstItem="qHh-Mt-9TT" firstAttribute="top" secondItem="f5Q-j8-cW2" secondAttribute="bottom" id="h3N-zv-rKW"/>
+                            <constraint firstItem="f5Q-j8-cW2" firstAttribute="top" secondItem="3se-qz-xqx" secondAttribute="top" id="o2Y-ha-akm"/>
+                            <constraint firstItem="CYA-ff-mfD" firstAttribute="centerX" secondItem="I1W-vJ-fjU" secondAttribute="centerX" id="oc4-rd-ehm"/>
+                            <constraint firstItem="CYA-ff-mfD" firstAttribute="top" secondItem="I1W-vJ-fjU" secondAttribute="bottom" constant="8" symbolic="YES" id="s2T-V1-rtv"/>
+                            <constraint firstItem="f5Q-j8-cW2" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leading" id="tqT-8f-vJa"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="DistanceText" destination="bZd-Qd-DnR" id="RqX-sK-esy"/>
+                        <outlet property="GameOver" destination="I1W-vJ-fjU" id="wu9-pW-qMB"/>
+                        <outlet property="TimeLeftText" destination="GFO-vS-vmc" id="Sso-8B-bfL"/>
+                        <outlet property="myMapView" destination="f5Q-j8-cW2" id="wR9-Il-Vso"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="117.77343749999999" y="111.71875"/>
         </scene>
     </scenes>
+    <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
 </document>

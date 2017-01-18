@@ -12,14 +12,26 @@
 #import <AVFoundation/AVFoundation.h>
 #import <CoreAudio/CoreAudioTypes.h>
 #import <CoreMotion/CoreMotion.h>
+#import <CoreLocation/CoreLocation.h>
+#import <MapKit/MapKit.h>
 
-@interface GameViewController : UIViewController
+@interface GameViewController : UIViewController <MKMapViewDelegate>
 {
     AVAudioRecorder* recorder;
     NSTimer* audioRecorderTimer;
     CMMotionManager* motionManager;
     NSOperationQueue* operationQueue;
     NSTimer* timer;
+    CLLocationManager* locationManager;
+    __weak IBOutlet MKMapView *myMapView;
+    MKPolyline *routeOverlay;
+    MKRoute* currentRoute;
+    CLLocationCoordinate2D userCoords;
+    CLLocationCoordinate2D destinationCoords;
+    BOOL firstLocationUpdate;
+    __weak IBOutlet UILabel *DistanceText;
+    __weak IBOutlet UILabel *TimeLeftText;
+    __weak IBOutlet UILabel *GameOver;
 }
 
 -(void)ChangeScene:(int)sceneID;
