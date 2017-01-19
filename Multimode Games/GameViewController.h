@@ -15,7 +15,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import <MapKit/MapKit.h>
 
-@interface GameViewController : UIViewController <MKMapViewDelegate>
+@interface GameViewController : UIViewController <MKMapViewDelegate, CLLocationManagerDelegate>
 {
     AVAudioRecorder* recorder;
     NSTimer* audioRecorderTimer;
@@ -35,6 +35,9 @@
     __weak IBOutlet UILabel *GameOver;
     __weak IBOutlet UIButton *replayButton;
     __weak IBOutlet UIButton *MainMenuButton;
+    __weak IBOutlet UILabel *currentCoord;
+    __weak IBOutlet UILabel *endCoord;
+    __weak IBOutlet UILabel *locationUpdate;
     
     float timeLeft;
 }

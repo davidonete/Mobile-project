@@ -331,6 +331,8 @@ BOOL StartAnim = FALSE;
 
 -(void)GyroscopeUpdate:(NSNotification*) notification
 {
+    if(!self.gameOver)
+    {
     NSDictionary* dictionary = notification.userInfo;
     NSNumber* number = (NSNumber*)dictionary[@"gyroscope"];
     int value = number.intValue;
@@ -351,8 +353,7 @@ BOOL StartAnim = FALSE;
         else
             self.player.position = CGPointMake(self.player.position.x - speed, self.player.position.y);
     }
-    
-    //NSLog(@"%i", number.intValue);
+    }
 }
 
 @end

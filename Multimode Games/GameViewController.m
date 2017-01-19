@@ -37,6 +37,9 @@
     GameOver.hidden = TRUE;
     replayButton.hidden = TRUE;
     MainMenuButton.hidden = TRUE;
+    locationUpdate.hidden = TRUE;
+    currentCoord.hidden = TRUE;
+    endCoord.hidden = TRUE;
     
     myMapView.hidden = TRUE;
     myMapView.delegate = self;
@@ -167,7 +170,8 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:@"gyroscope" object:self userInfo:dictionary];
 }
 
-- (CLLocationCoordinate2D) locationWithBearing:(float)bearing distance:(float)distanceMeters fromLocation:(CLLocationCoordinate2D)origin {
+- (CLLocationCoordinate2D) locationWithBearing:(float)bearing distance:(float)distanceMeters fromLocation:(CLLocationCoordinate2D)origin
+{
     CLLocationCoordinate2D target;
     const double distRadians = distanceMeters / (6372797.6); // earth radius in meters
     
@@ -194,15 +198,17 @@
     timeLeft--;
     TimeLeftText.text = [NSString stringWithFormat:@"Time left: %.0f", timeLeft];
     
+    locationUpdate.hidden = TRUE;
+    
+    [locationManager stopUpdatingLocation];
+    [locationManager startUpdatingLocation];
+    
     if(timeLeft <= 0.0)
         [self GameOver];
 }
 
 -(void) LocationInit
 {
-    timeLeft = 200.0;
-    timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(GPSUpdate) userInfo:nil repeats:TRUE];
-    
     gameOver = FALSE;
     TimeLeftText.hidden = FALSE;
     DistanceText.hidden = FALSE;
@@ -214,10 +220,49 @@
     myMapView.mapType = MKMapTypeSatellite;
     
     locationManager = [CLLocationManager new];
+    locationManager.delegate = self;
+    locationManager.distanceFilter = kCLDistanceFilterNone;
+    locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    locationManager.pausesLocationUpdatesAutomatically = NO;
+    [locationManager startUpdatingHeading];
+    //[locationManager setAllowsBackgroundLocationUpdates:YES];
+    
     if([locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)])
         [locationManager requestWhenInUseAuthorization];
+    if([locationManager respondsToSelector:@selector(requestAlwaysAuthorization)])
+        [locationManager requestAlwaysAuthorization];
     
-    [locationManager startUpdatingLocation];
+    timeLeft = 100.0;
+    timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(GPSUpdate) userInfo:nil repeats:TRUE];
+}
+
+-(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations
+{
+    if(!gameOver)
+    {
+    userCoords = [locations objectAtIndex:0].coordinate;
+    
+    if(!firstLocationUpdate)
+    {
+        float bearing = [self Random:0 :100];
+        destinationCoords = [self locationWithBearing:bearing distance:150 fromLocation:userCoords];
+        endCoord.text = [NSString stringWithFormat:@"End: %f, %f", destinationCoords.latitude, destinationCoords.longitude];
+        firstLocationUpdate = TRUE;
+    }
+    
+    CLLocation *startLocation = [[CLLocation alloc] initWithLatitude:userCoords.latitude longitude:userCoords.longitude];
+    CLLocation *endLocation = [[CLLocation alloc] initWithLatitude:destinationCoords.latitude longitude:destinationCoords.longitude];
+    CLLocationDistance distance = [startLocation distanceFromLocation:endLocation];
+    
+    DistanceText.text = [NSString stringWithFormat:@"Distance: %.0f", distance];
+    currentCoord.text = [NSString stringWithFormat:@"Current: %f, %f", userCoords.latitude, userCoords.longitude];
+    //locationUpdate.hidden = FALSE;
+        
+    if(distance < 50)
+        [self GameOver];
+        
+    [self UpdateMapDirections:destinationCoords user:userCoords];
+    }
 }
 
 -(void)UpdateMapDirections:(CLLocationCoordinate2D)destinationLocation user: (CLLocationCoordinate2D) sourceLocation
@@ -245,11 +290,6 @@
         }
 
         currentRoute = [response.routes firstObject];
-        DistanceText.text = [NSString stringWithFormat:@"Distance: %.0f", currentRoute.distance];
-        
-        if(currentRoute.distance < 80.0)
-            [self GameOver];
-        
         [self AddRouteToMap:currentRoute];
     }];
 }
@@ -329,24 +369,9 @@
 
 -(void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
 {
-    if(!gameOver)
-    {
     MKMapCamera *camera = [MKMapCamera cameraLookingAtCenterCoordinate: userLocation.coordinate fromEyeCoordinate:CLLocationCoordinate2DMake(userLocation.coordinate.latitude, userLocation.coordinate.longitude) eyeAltitude:500];
     
     [mapView setCamera:camera animated:YES];
-    
-    userCoords = userLocation.coordinate;
-    
-    if(!firstLocationUpdate)
-    {
-        float bearing = [self Random:0 :100];
-        destinationCoords = [self locationWithBearing:bearing distance:150 fromLocation:userCoords];
-        firstLocationUpdate = TRUE;
-        //[self UpdateMapDirections:destinationCoords user:userCoords];
-        //destinationCoords = [self GetLastCoordinateOfRoute:currentRoute];
-    }
-    [self UpdateMapDirections:destinationCoords user:userCoords];
-    }
 }
 
 -(MKOverlayRenderer*) mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay
